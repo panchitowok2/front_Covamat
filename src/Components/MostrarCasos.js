@@ -34,8 +34,7 @@ function MostrarCasosImplementacion() {
 export default function MostrarCasos() {
   return (
     <div>
-      <h2>Mi primer aplicacion Apollo 🚀</h2>
-      <br />
+      <h2>Casos almacenados: </h2>
       <MostrarCasosImplementacion />
     </div>
   );
