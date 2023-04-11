@@ -16,8 +16,9 @@ export default function App() {
         <nav className="navbar navbar-dark bg-dark">
           <div className="navbar-nav mr-auto flex-row">
             <Link to="/" className="nav-link mr-2">Inicio</Link>
+            <Link to="/docvariedad" className="nav-link mr-2">Documentar Variedad</Link>
+            <Link to="/crearcaso" className="nav-link mr-2">Instanciar Caso</Link>
             <Link to="/mostrarcasos" className="nav-link mr-2">Mostrar Casos</Link>
-            <Link to="/crearcaso" className="nav-link mr-2">Crear Caso</Link>
           </div>
         </nav>
         <div className="container mt-5">

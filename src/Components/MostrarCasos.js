@@ -25,7 +25,7 @@ function MostrarCasosImplementacion() {
         </tr>
       </thead>
       <tbody>
-        {!loading && !error && data?.getCases.map(caso => <Caso caso={caso} key={caso.id} />)}
+        {!loading && !error && data?.getCases.map(caso => <Caso caso={caso} key={caso._id} />)}
       </tbody>
     </table>
   </div>;
