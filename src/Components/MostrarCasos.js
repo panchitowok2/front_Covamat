@@ -1,15 +1,8 @@
 // Consulta basica
 import { useQuery, gql } from '@apollo/client';
 import Caso from './Caso';
+import{GET_CASES} from '../graphql.js';
 
-const GET_CASES = gql`
-query Query {
-  getCases {
-    _id
-    name
-  }
-}
-`;
 function MostrarCasosImplementacion() {
   const { loading, error, data } = useQuery(GET_CASES);
 

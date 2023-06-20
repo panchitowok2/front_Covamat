@@ -1,16 +1,13 @@
 import { useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
-
-const CREATE_CASE_MUTATION = gql`
-    mutation Mutation($inputCase: InputCase) {
-        createCase(inputCase: $inputCase)
-      }
-`;
+import {CREATE_CASE_MUTATION, GET_CASES} from '../graphql.js';
 
 export default function CrearCaso() {
     const [nombre, setNombre] = useState('');
     const [dominio, setDominio] = useState('');
-    const [createMutation] = useMutation(CREATE_CASE_MUTATION);
+    const [createMutation] = useMutation(CREATE_CASE_MUTATION, {refetchQueries: [
+        {query: GET_CASES}
+    ]});
 
     const handleSubmit = evt => {
         evt.preventDefault();

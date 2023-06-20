@@ -3,6 +3,7 @@ import MostrarCasos from './MostrarCasos';
 import Saludo from './Saludo';
 import CrearCaso from './CrearCaso';
 import DocumentarVariedad from './DocumentarVariedad';
+import Servicios from './Servicios';
 import { Link, BrowserRouter, Route, Routes } from 'react-router-dom';
 
 const client = new ApolloClient({
@@ -14,12 +15,15 @@ export default function App() {
   return (
     <ApolloProvider client={client}>
       <BrowserRouter>
-        <nav className="navbar navbar-dark bg-dark">
-          <div className="navbar-nav mr-auto flex-row">
-            <Link to="/" className="nav-link mr-2">Inicio</Link>
-            <Link to="/documentarvariedad" className="nav-link mr-2">Documentar Variedad</Link>
-            <Link to="/crearcaso" className="nav-link mr-2">Instanciar Caso</Link>
-            <Link to="/mostrarcasos" className="nav-link mr-2">Mostrar Casos</Link>
+        <nav className="navbar custom-navbar">
+          <div className="container">
+            <div className="navbar-nav mr-auto flex-row">
+              <Link to="/" className="nav-link mr-2 text-white">Inicio</Link>
+              <Link to="/documentarvariedad" className="nav-link mr-2 text-white">Documentar Variedad</Link>
+              <Link to="/crearcaso" className="nav-link mr-2 text-white">Instanciar Caso</Link>
+              <Link to="/mostrarcasos" className="nav-link mr-2 text-white">Mostrar Casos</Link>
+              <Link to="/servicios" className="nav-link mr-2 text-white">Servicios</Link>
+            </div>
           </div>
         </nav>
         <div className="container mt-5">
@@ -28,6 +32,7 @@ export default function App() {
             <Route path="/MostrarCasos" element={<MostrarCasos />} />
             <Route path="/CrearCaso" element={<CrearCaso />} />
             <Route path="/DocumentarVariedad" element={<DocumentarVariedad />} />
+            <Route path="/Servicios" element={<Servicios />} />
           </Routes>
         </div>
       </BrowserRouter>

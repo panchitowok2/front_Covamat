@@ -28,6 +28,11 @@
   color: #61dafb;
 }
 
+.custom-navbar {
+  background-color: navy;
+}
+
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -36,3 +41,6 @@
     transform: rotate(360deg);
   }
 }
+
+@import 'bootstrap/dist/css/bootstrap.min.css';
+
