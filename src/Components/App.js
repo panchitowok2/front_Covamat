@@ -40,8 +40,8 @@ export default function App() {
             <Route path="/Perfil" element={<Profile />} />
           </Routes>
         </div>
+          <Footer />
       </BrowserRouter>
-      <Footer />
     </ApolloProvider>
   );
 }

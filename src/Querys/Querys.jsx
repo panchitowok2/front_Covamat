@@ -1,4 +1,4 @@
-import {gql} from '@apollo/client';
+import { gql } from '@apollo/client';
 
 export const CREATE_VARIETY_MUTATION = gql`
 mutation Mutation($datasheetInstance: InputDatasheetInstance) {
@@ -29,4 +29,25 @@ query Query {
       name
     }
   }
+`;
+
+export const GET_DATASHEETS_BY_DOMAIN = gql`
+query Query($domain: InputDomain) {
+  getDatasheetsByDomain(domain: $domain) {
+    _id
+    domain {
+      name
+    }
+    name
+    variationPoint {
+      name
+    }
+    variations {
+      name
+    }
+    varietyType {
+      name
+    }
+  }
+}
 `;
