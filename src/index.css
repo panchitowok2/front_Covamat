@@ -17,5 +17,53 @@ code {
   background-color: darkslategrey;
 }
 
+.triangle-container {
+  position: relative;
+  width: 130px;
+  height: 130px;
+}
+
+.triangle {
+  --b:4px; /* control the border thickness */
+  width: 100%;
+  aspect-ratio: 1/cos(30deg);
+  clip-path: polygon(50% 0,100% 100%,0 100%,50% 0,50% var(--b),calc(var(--b)*cos(30deg)) calc(100% - var(--b)/2),calc(100% - var(--b)*cos(30deg)) calc(100% - var(--b)/2),50% var(--b));
+  background: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.triangle-text {
+  position: absolute;
+  top: 50%; 
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: black; 
+  text-align: center;
+}
+
+.rectangle {
+  width: 150px; /* Ajusta según sea necesario */
+  height: 50px; /* Ajusta según sea necesario */
+  border: 2px solid black; /* Ajusta el grosor del borde según sea necesario */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.line {
+  position: absolute;
+  width: 3px;
+  height: 50px;
+  background-color: black;
+  left: 10%;
+  top: 127px;
+}
+
+.rectangle-text {
+  color: black; /* Elige el color que prefieras para el texto */
+}
+
 
 @import 'bootstrap/dist/css/bootstrap.min.css';

@@ -32,6 +32,15 @@
   background-color: navy;
 }
 
+/* HTML: <div class="triangle"></div> */
+.triangle {
+  --b:25px; /* control the border thickness */
+
+  width: 180px;
+  aspect-ratio: 1/cos(30deg);
+  clip-path: polygon(50% 0,100% 100%,0 100%,50% 0,50% var(--b),calc(var(--b)*cos(30deg)) calc(100% - var(--b)/2),calc(100% - var(--b)*cos(30deg)) calc(100% - var(--b)/2),50% var(--b));
+  background: linear-gradient(45deg,#FA6900,#C02942);
+}
 
 @keyframes App-logo-spin {
   from {

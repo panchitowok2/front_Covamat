@@ -1,11 +1,12 @@
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
-import Saludo from './Inicio/Saludo';
-import DocumentarVariedad from './DocumentarVariedad/DocumentarVariedad';
-import Servicios from './/Servicios/Servicios.jsx';
-import PantallaLogIn from './PantallaLogIn';
-import Profile from './profile';
+import Saludo from './Inicio/Saludo.jsx';
+import DocumentarVariedad from './DocumentarVariedad/DocumentarVariedad.jsx';
+import Servicios from './Servicios/Servicios.jsx';
+import PantallaLogIn from './PantallaLogIn.js';
+import Profile from './profile.js';
 import { Link, BrowserRouter, Route, Routes } from 'react-router-dom';
-import Footer from '../Components/Footer/footer';
+import Footer from './Footer/footer.jsx';
+import Prueba from './Prueba.jsx'
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000',
@@ -23,6 +24,7 @@ export default function App() {
               <Link to="/documentarvariedad" className="nav-link mr-2 text-white">Documentar Variedad</Link>
               <Link to="/servicios" className="nav-link mr-2 text-white">Servicios</Link>
               <Link to="/perfil" className="nav-link mr-2 text-white">Perfil</Link>
+              <Link to="/prueba" className="nav-link mr-2 text-white">Prueba</Link>
             </div>
           </div>
         </nav>
@@ -32,6 +34,7 @@ export default function App() {
             <Route path="/DocumentarVariedad" element={<DocumentarVariedad />} />
             <Route path="/Servicios" element={<Servicios />} />
             <Route path="/Perfil" element={<Profile />} />
+            <Route path="/Prueba" element={<Prueba />} />
           </Routes>
         </div>
           <Footer />
