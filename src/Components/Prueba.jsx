@@ -18,7 +18,8 @@ const Prueba = ({ datasheet }) => {
                 </span>
             </div>
             {/* Acá voy a mostrar las variaciones de ese punto de variacion*/}
-            {datasheet && datasheet.variations.map((variation, index) => (
+            {console.log('objeto datasheet', datasheet)}
+            {datasheet && datasheet.variations && datasheet.variations.map((variation, index) => (
                 <div className="rectangle ml-5 mt-1" key = {index}>
                     <span className="rectangle-text"> {variation.name} </span>
                 </div>

@@ -7,6 +7,7 @@ import Profile from './profile.js';
 import { Link, BrowserRouter, Route, Routes } from 'react-router-dom';
 import Footer from './Footer/footer.jsx';
 import Prueba from './Prueba.jsx'
+import AgregarOtraVariacion from './DocumentarVariedad/AgregarOtraVariacion.jsx';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000',
@@ -25,6 +26,7 @@ export default function App() {
               <Link to="/servicios" className="nav-link mr-2 text-white">Servicios</Link>
               <Link to="/perfil" className="nav-link mr-2 text-white">Perfil</Link>
               <Link to="/prueba" className="nav-link mr-2 text-white">Prueba</Link>
+              <Link to="/agregarOtra" className="nav-link mr-2 text-white">Agregar otra variacion</Link>
             </div>
           </div>
         </nav>
@@ -35,6 +37,7 @@ export default function App() {
             <Route path="/Servicios" element={<Servicios />} />
             <Route path="/Perfil" element={<Profile />} />
             <Route path="/Prueba" element={<Prueba />} />
+            <Route path="/AgregarOtra" element={<AgregarOtraVariacion />} />
           </Routes>
         </div>
           <Footer />
