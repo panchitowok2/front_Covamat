@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { GET_DOMAINS, GET_VARIETY_TYPES, GET_VARIATIONS_POINTS, GET_DATASHEETS_BY_DOMAIN, GET_DATASHEETS_BY_DOMAIN_VARIETYTYPE_VARIATIONPOINT, CREATE_DATASHEET } from '../../Querys/Querys.jsx'
 import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
-import Prueba from '../Prueba.jsx'
+import DatosDatasheet from './DatosDatasheet.jsx'
 import { useForm } from 'react-hook-form';
 
 //este va a ser el datasheet que se le envie al back
@@ -28,8 +28,10 @@ function BusquedaDatasheet({ setIdDatasheet }) {
     const puntoDeVariacion = watch("inputPuntoVariacion"); // Obtener el valor del selector de punto de variacion
     const puntoDeVariacionSelector = watch("selectorPuntoVariacion"); // Obtener el valor del selector de punto de variacion
 
-    const { loading: loadingDomains, error: errorDomains, data: dataDomains, refetch } = useQuery(GET_DOMAINS);
-    
+    const { loading: loadingDomains, error: errorDomains, data: dataDomains, refetch } = useQuery(GET_DOMAINS, {
+        fetchPolicy: "network-only"
+    });
+
     //const { loading: loadingVT, error: errorVT, data: dataVT } = useQuery(GET_VARIETY_TYPES);
 
     const [obtenerVP, { loading: loadingVP, error: errorVP, data: dataVP }] = useLazyQuery(GET_VARIATIONS_POINTS, {
@@ -37,11 +39,16 @@ function BusquedaDatasheet({ setIdDatasheet }) {
             varietyType: {
                 name: seleccionTipoVariacion
             }
-        }
+        },
+        fetchPolicy: "network-only"
     });
-    const [obtenerDatasheetsPorDom, { loading: loadingDatasheets, error: errorDatasheets, data: dataDatasheets }] = useLazyQuery(GET_DATASHEETS_BY_DOMAIN);
+    const [obtenerDatasheetsPorDom, { loading: loadingDatasheets, error: errorDatasheets, data: dataDatasheets }] = useLazyQuery(GET_DATASHEETS_BY_DOMAIN, {
+        fetchPolicy: "network-only"
+    });
 
-    const [obtenerDatasheet, { loading: loadingDatasheet, error: errorDatasheet, data: dataDatasheet }] = useLazyQuery(GET_DATASHEETS_BY_DOMAIN_VARIETYTYPE_VARIATIONPOINT);
+    const [obtenerDatasheet, { loading: loadingDatasheet, error: errorDatasheet, data: dataDatasheet }] = useLazyQuery(GET_DATASHEETS_BY_DOMAIN_VARIETYTYPE_VARIATIONPOINT, {
+        fetchPolicy: "network-only"
+    });
 
     const [createDatasheet, { loading: loadingCreateDatasheet, error: errorCreateDatasheet, data: dataCreateDatasheet }] = useMutation(CREATE_DATASHEET);
 
@@ -131,13 +138,13 @@ function BusquedaDatasheet({ setIdDatasheet }) {
     // Luego puedes usar este hook en tu componente de la siguiente manera:
 
     useDataChangeEffect(dataDatasheet, () => {
-        console.log('dataDatasheet ha cambiado', dataDatasheet);
+        //console.log('dataDatasheet ha cambiado', dataDatasheet);
         // Aquí puedes llamar a tu método
         if (!loadingDatasheet && dataDatasheet) {
             console.log('el largo del arreglo es: ', dataDatasheet.getDatasheetByDomainVTVP.length)
             if (dataDatasheet.getDatasheetByDomainVTVP.length > 0) { //encontro almenos un dataheet
                 setIdDatasheet(dataDatasheet.getDatasheetByDomainVTVP[0]._id)
-                console.log('Accedo a los elementos del objeto: ', dataDatasheet.getDatasheetByDomainVTVP[0]._id)
+                //console.log('Accedo a los elementos del objeto: ', dataDatasheet.getDatasheetByDomainVTVP[0]._id)
             } else { //no encontro un datasheet con los selectores, crea uno.
                 console.log('llamo a crear datasheet')
                 crearDatasheet();
@@ -146,12 +153,15 @@ function BusquedaDatasheet({ setIdDatasheet }) {
     });
 
     useDataChangeEffect(dataCreateDatasheet, () => {
-        console.log('dataCreateDatasheet ha cambiado', dataCreateDatasheet.createDatasheet);
+        //console.log('dataCreateDatasheet ha cambiado', dataCreateDatasheet.createDatasheet);
         refetch();
         setIdDatasheet(dataCreateDatasheet.createDatasheet)
     });
 
-
+    useDataChangeEffect(dataDatasheets, () => {
+        //console.log('dataDatasheets ha cambiado', dataDatasheets);
+        refetch();
+    });
 
     useEffect(() => {
         // llamo a los metodos que obtienen datos nuevamente
@@ -233,7 +243,7 @@ function BusquedaDatasheet({ setIdDatasheet }) {
 
     return (
         <>
-            
+
             <div className='row align-items-start'>
                 <div className='card col-md-4 ml-3'>
                     <h5 className='card-header'>
@@ -242,7 +252,7 @@ function BusquedaDatasheet({ setIdDatasheet }) {
                     <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
                         <div>
                             <label>Seleccione dominio: </label>
-                            <select className="form-control" {...register("dominio", { required: false })} disabled={deshablitarSelector} onChange={(event) => buscarDatasheetsPorDominio(event)}>
+                            <select className="form-control" {...register("dominio", { required: false })} disabled={deshablitarSelector} onChange={buscarDatasheetsPorDominio}>
                                 <option value='0'>Seleccionar dominio</option>
                                 {!loadingDomains && !errorDomains && dataDomains.getDomains && dataDomains.getDomains.map((dominio, index) => (
                                     <option key={index} value={dominio.name}>{dominio.name}</option>
@@ -286,7 +296,7 @@ function BusquedaDatasheet({ setIdDatasheet }) {
                 </div >
                 <div className='col'>
                     {!loadingDatasheets && !errorDatasheets && dataDatasheets && dataDatasheets.getDatasheetsByDomain.map((datasheet) => (
-                        <Prueba datasheet={datasheet} />
+                        <DatosDatasheet datasheet={datasheet} />
                     ))}
                 </div>
             </div >

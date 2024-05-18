@@ -1,28 +1,32 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
-function AgregarOtraVariacion() {
-    const [show, setShow] = React.useState(false);
+function AgregarOtraVariacion({show, setShow, setResetInputs, setFinalizarTransaccion}) {
+    //const [show, setShow] = useState(false);
 
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleNo = () => {
+        setShow(false);
+        setFinalizarTransaccion(true);
+    }
+    
+    const handleSi = () => {
+        setShow(false);
+        setResetInputs(true)
+    }
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
-                Launch static backdrop modal
-            </Button>
-
-            <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
+            <Modal show={show} aria-labelledby="contained-modal-title-vcenter" centered onHide={handleNo} backdrop="static" keyboard={false}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Desea agregar más variaciones?</Modal.Title>
+                    <Modal.Title id="contained-modal-title-vcenter">Desea agregar más variaciones?</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    asdasdasd
+                    Detectamos que lleno todos los campos disponibles para agregar variaciones. Si desea agregar mas variaciones
+                    al datasheet seleccionado, presione Agregar. Si desea volver al manú principal presione Finalizar.
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary">No</Button>
-                    <Button variant="primary" onClick={handleClose}>Si</Button>
+                    <Button variant="secondary" onClick={handleNo}>Finalizar</Button>
+                    <Button variant="primary" onClick={handleSi}>Agregar</Button>
 
                 </Modal.Footer>
             </Modal>
