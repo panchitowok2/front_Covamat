@@ -3,7 +3,7 @@ import { ADD_VARIATIONS } from '../../Querys/Querys.jsx';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 
-function AgregarVariaciones({ datasheet, setMostrarAgregarMasVariaciones, setShowConfirmar, resetInputs, setResetInputs, agregarVariaciones, setFinalizarTransaccion }) {
+function AgregarVariaciones({ datasheet, setMostrarAgregarMasVariaciones, setShowConfirmar, resetInputs, setResetInputs, agregarVariaciones, setFinalizarTransaccion, setAgregarVariaciones }) {
 
     const { register, formState: { errors }, handleSubmit, setValue, watch } = useForm();
     const [agregarVariacionesBD, { loading: loadingAddVariations, error: errorAddVariations, data: dataAddVariations }] = useMutation(ADD_VARIATIONS);
@@ -40,10 +40,19 @@ function AgregarVariaciones({ datasheet, setMostrarAgregarMasVariaciones, setSho
     // Luego puedes usar este hook en tu componente de la siguiente manera:
 
     useDataChangeEffect(dataAddVariations, () => {
-        console.log('dataDatasheet ha cambiado', dataAddVariations);
+        console.log('dataAddVariations ha cambiado', dataAddVariations);
         // Aquí puedes llamar a tu método
         if (dataAddVariations) {
             console.log('Las variaciones se agregar exitosamente!')
+
+            if (variations.length === 5) {
+                console.log('Seteo el modal de agregar mas en true')
+                setVariations(null)
+                setAgregarVariaciones(false)
+                setMostrarAgregarMasVariaciones(true)
+            } else {
+                setFinalizarTransaccion(true)
+            }
         } else {
             console.log('No se pudieron agregar las variaciones :(')
         }
@@ -78,13 +87,8 @@ function AgregarVariaciones({ datasheet, setMostrarAgregarMasVariaciones, setSho
                     variations
                 }
             })
+            console.log('Se agregaron las variaciones correctamente!')
 
-            if (variations.length === 5) {
-                console.log('Seteo el modal de agregar mas en true')
-                setMostrarAgregarMasVariaciones(true)
-            } else {
-                setFinalizarTransaccion(true)
-            }
 
         } else {
             console.log('No se pudieron agregar las variaciones :(')
@@ -100,23 +104,23 @@ function AgregarVariaciones({ datasheet, setMostrarAgregarMasVariaciones, setSho
                     </h5>
                     <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
                         <label>Ingresar variaciones:</label>
-                        <div class="form-floating">
+                        <div className="form-floating">
                             <input type="variacion1" className="form-control" {...register("inputVariacion1", { required: true, maxLength: 50 })} id="floatingInput" placeholder="variacion1" />
                             <label for="floatingInput">Variación</label>
                         </div>
-                        <div class="form-floating mt-2">
+                        <div className="form-floating mt-2">
                             <input type="variacion1" className="form-control" {...register("inputVariacion2", { required: false, maxLength: 50 })} id="floatingInput" placeholder="variacion2" />
                             <label for="floatingInput">Variación</label>
                         </div>
-                        <div class="form-floating mt-2">
+                        <div className="form-floating mt-2">
                             <input type="variacion1" className="form-control" {...register("inputVariacion3", { required: false, maxLength: 50 })} id="floatingInput" placeholder="variacion3" />
                             <label for="floatingInput">Variación</label>
                         </div>
-                        <div class="form-floating mt-2">
+                        <div className="form-floating mt-2">
                             <input type="variacion1" className="form-control" {...register("inputVariacion4", { required: false, maxLength: 50 })} id="floatingInput" placeholder="variacion4" />
                             <label for="floatingInput">Variación</label>
                         </div>
-                        <div class="form-floating mt-2">
+                        <div className="form-floating mt-2">
                             <input type="variacion1" className="form-control" {...register("inputVariacion5", { required: false, maxLength: 50 })} id="floatingInput" placeholder="variacion5" />
                             <label for="floatingInput">Variación</label>
                         </div>

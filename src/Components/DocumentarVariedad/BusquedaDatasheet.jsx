@@ -160,7 +160,7 @@ function BusquedaDatasheet({ setIdDatasheet }) {
 
     useDataChangeEffect(dataDatasheets, () => {
         //console.log('dataDatasheets ha cambiado', dataDatasheets);
-        refetch();
+        //refetch();
     });
 
     useEffect(() => {
@@ -247,46 +247,49 @@ function BusquedaDatasheet({ setIdDatasheet }) {
             <div className='row align-items-start'>
                 <div className='card col-md-4 ml-3'>
                     <h5 className='card-header'>
-                        Seleccione un datasheet para agregar variaciones:
+                        Buscar datasheet:
                     </h5>
                     <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
-                        <div>
-                            <label>Seleccione dominio: </label>
-                            <select className="form-control" {...register("dominio", { required: false })} disabled={deshablitarSelector} onChange={buscarDatasheetsPorDominio}>
+
+                        <div className='form-floating'>
+                            <select className="form-control" id="selectDominio" {...register("dominio", { required: false })} disabled={deshablitarSelector} onChange={buscarDatasheetsPorDominio}>
                                 <option value='0'>Seleccionar dominio</option>
                                 {!loadingDomains && !errorDomains && dataDomains.getDomains && dataDomains.getDomains.map((dominio, index) => (
                                     <option key={index} value={dominio.name}>{dominio.name}</option>
                                 )
                                 )}
                             </select>
+                            <label for="selectDominio">Seleccionar Dominio</label>
                         </div>
-                        <div>
-                            <label>Si no encuentra el dominio, escribalo a continuación: </label>
-                            <input className="form-control" {...register("inputDominio", { required: false, maxLength: 15 })} onChange={entradaDominio} />
+                        <label>Si no encuentra el dominio, escribalo a continuación: </label>
+                        <div className="form-floating">
+                            <input type="input1" className="form-control" id="inputDominio" placeholder="dominio" {...register("inputDominio", { required: false, maxLength: 15 })} onChange={entradaDominio} />
+                            <label for="inputDominio">Ingresar Dominio</label>
                         </div>
-                        <div>
-                            <label>Seleccione el tipo de variedad: </label>
-                            <select className="form-control" {...register("selectorTipoVariedad", { required: false })} onChange={buscarPuntosDeVariacion}>
-                                <option value='0'>Seleccionar tipo de variedad</option>
+                        <div className='form-floating mt-2'>
+                            <select className="form-control" id="selectTipoVariedad" {...register("selectorTipoVariedad", { required: false })} onChange={buscarPuntosDeVariacion}>
+                                <option value='0'>Seleccionar Tipo de Variedad</option>
                                 <option value='fuente'>Fuente</option>
                                 <option value='procesamiento'>Procesamiento</option>
                                 <option value='contexto'>Contexto</option>
                                 <option value='contenido'>Contenido</option>
                             </select>
+                            <label for="selectTipoVariedad">Seleccionar Tipo de Variedad</label>
                         </div>
-                        <div>
-                            <label>Seleccione punto de variación: </label>
-                            <select className="form-control" {...register("selectorPuntoVariacion", { required: false })} disabled={deshablitarSelectorVP}>
+                        <div className='form-floating mt-2'>
+                            <select className="form-control" id="selectPuntoVariacion" {...register("selectorPuntoVariacion", { required: false })} disabled={deshablitarSelectorVP}>
                                 <option value="0">Seleccionar punto de variación</option>
                                 {!loadingVP && !errorVP && dataVP && dataVP.getVariationPointsByVarietyTypes.map((variationPoint, index) => (
                                     <option key={index} value={variationPoint.name}>{variationPoint.name}</option>
                                 )
                                 )}
                             </select>
+                            <label for="selectPuntoVariacion">Seleccionar Punto de Variación: </label>
                         </div>
-                        <div>
-                            <label>Si no encuentra el punto de variación, escribalo a continuación: </label>
-                            <input className="form-control" {...register("inputPuntoVariacion", { required: false })} onChange={entradaPuntoVariacion} />
+                        <label>Si no encuentra el punto de variación, escribalo a continuación: </label>
+                        <div className='form-floating'>
+                            <input type="input2" className="form-control" id="inputPuntoVariacion" placeholder="puntoVariacion" {...register("inputPuntoVariacion", { required: false , maxLength: 30})} onChange={entradaPuntoVariacion} />
+                            <label htmlFor="inputPuntoVariacion">Ingresar Punto de Variación</label>
                         </div>
                         <div className="mt-2 d-flex justify-content-end">
                             <button type="button submit" className="btn btn-success" >Siguiente</button>
