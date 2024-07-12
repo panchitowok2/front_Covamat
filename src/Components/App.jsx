@@ -6,9 +6,7 @@ import PantallaLogIn from './PantallaLogIn.js';
 import Profile from './profile.js';
 import { Link, BrowserRouter, Route, Routes } from 'react-router-dom';
 import Footer from './Footer/footer.jsx';
-import DatosDatasheet from './/DocumentarVariedad/DatosDatasheet.jsx'
-import AgregarOtraVariacion from './DocumentarVariedad/AgregarOtraVariacion.jsx';
-
+import DatosCaso from './DocumentarCaso/DatosCaso.jsx'
 const client = new ApolloClient({
   uri: 'http://localhost:4000',
   cache: new InMemoryCache(),
@@ -25,8 +23,7 @@ export default function App() {
               <Link to="/documentarvariedad" className="nav-link mr-2 text-white">Documentar Variedad</Link>
               <Link to="/servicios" className="nav-link mr-2 text-white">Servicios</Link>
               <Link to="/perfil" className="nav-link mr-2 text-white">Perfil</Link>
-              <Link to="/datosDatasheet" className="nav-link mr-2 text-white">DatosDatasheet</Link>
-              <Link to="/agregarOtra" className="nav-link mr-2 text-white">Agregar otra variacion</Link>
+              <Link to="/documentarCaso" className="nav-link mr-2 text-white">Documentar Caso</Link>
             </div>
           </div>
         </nav>
@@ -36,8 +33,7 @@ export default function App() {
             <Route path="/DocumentarVariedad" element={<DocumentarVariedad />} />
             <Route path="/Servicios" element={<Servicios />} />
             <Route path="/Perfil" element={<Profile />} />
-            <Route path="/DatosDatasheet" element={<DatosDatasheet />} />
-            <Route path="/AgregarOtra" element={<AgregarOtraVariacion />} />
+            <Route path="/DocumentarCaso" element={<DatosCaso />} />
           </Routes>
         </div>
           <Footer />
