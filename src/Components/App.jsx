@@ -6,7 +6,8 @@ import PantallaLogIn from './PantallaLogIn.js';
 import Profile from './profile.js';
 import { Link, BrowserRouter, Route, Routes } from 'react-router-dom';
 import Footer from './Footer/footer.jsx';
-import DatosCaso from './DocumentarCaso/DatosCaso.jsx'
+import DocumentarCaso from './DocumentarCaso/DocumentarCaso.jsx'
+
 const client = new ApolloClient({
   uri: 'http://localhost:4000',
   cache: new InMemoryCache(),
@@ -33,7 +34,7 @@ export default function App() {
             <Route path="/DocumentarVariedad" element={<DocumentarVariedad />} />
             <Route path="/Servicios" element={<Servicios />} />
             <Route path="/Perfil" element={<Profile />} />
-            <Route path="/DocumentarCaso" element={<DatosCaso />} />
+            <Route path="/DocumentarCaso" element={<DocumentarCaso />} />
           </Routes>
         </div>
           <Footer />

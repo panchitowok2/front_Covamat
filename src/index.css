@@ -64,6 +64,9 @@ code {
 .rectangle-text {
   color: black; /* Elige el color que prefieras para el texto */
 }
+.no-outline:focus {
+  outline: none !important;
+}
 
 
 @import 'bootstrap/dist/css/bootstrap.min.css';

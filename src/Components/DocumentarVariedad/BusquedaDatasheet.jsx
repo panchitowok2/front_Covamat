@@ -245,7 +245,7 @@ function BusquedaDatasheet({ setIdDatasheet }) {
         <>
 
             <div className='row align-items-start'>
-                <div className='card col-md-4 ml-3'>
+                <div className='card col-md-4 ml-3 p-0'>
                     <h5 className='card-header'>
                         Buscar datasheet:
                     </h5>
