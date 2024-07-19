@@ -60,6 +60,14 @@ query Query($domain: InputDomain) {
 }
 `;
 
+export const GET_VARIATIONPOINTS_BY_VARIETYTYPE_AND_DOMAIN = gql`
+query Query($varietyType: InputVarietyType, $domain: InputDomain) {
+  getVariationPointsByVarietyTypeAndDomain(varietyType: $varietyType, domain: $domain) {
+    name
+  }
+}
+`;
+
 export const GET_DATASHEETS_BY_DOMAIN_VARIETYTYPE_VARIATIONPOINT = gql`
 query Query($domain: InputDomain, $varietyType: InputVarietyType, $variationPoint: InputVariationPoint) {
   getDatasheetByDomainVTVP(domain: $domain, varietyType: $varietyType, variationPoint: $variationPoint) {

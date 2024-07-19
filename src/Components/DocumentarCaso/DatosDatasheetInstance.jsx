@@ -2,20 +2,43 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { FloatingLabel } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
-import { useState, useEffect} from 'react';
-import { useGetVarietyTypesByDomain }  from '../../Methods/VarietyType';
+import { useState, useEffect } from 'react';
+import { useGetVarietyTypesByDomain } from '../../Methods/VarietyType';
+import { useGetVariationPointsByVarietyTypeAndDomain } from '../../Methods/VariationPoint';
+import { useForm } from 'react-hook-form';
+
 
 function DatosDatasheetInstance({ dominio }) {
     const [variable, setVariable] = useState([
         { nombre: '', valor: '' }
     ]);
+    const [varietyType, setVarietyType] = useState(null);
     const { loadingVT, errorVT, dataVT } = useGetVarietyTypesByDomain(dominio);
+
+    const { register, formState: { errors }, handleSubmit, setValue, watch } = useForm(
+        {
+            defaultValues: {
+                //  dominio: '0', // Seteo el valor por defecto del selector
+                selectorTipoVariedad: '',
+            },
+        }
+    );
+    const seleccionTipoVariacion = watch("selectorTipoVariedad"); // Obtener el valor del selector de tipo de variedad
+    //const { loadingVP, errorVP, dataVP } = useGetVariationPointsByVarietyTypeAndDomain(dominio);
+    const { loadingVP, errorVP, dataVP } = useGetVariationPointsByVarietyTypeAndDomain(seleccionTipoVariacion, dominio);
+
 
     useEffect(() => {
         // llamo a los metodos que obtienen datos nuevamente
-        console.log('Valor datavt', dataVT, ' dominio ', dominio )
+        if (dataVT) {
+            setValue("seleccionTipoVariacion", dataVT.getVarietyTypesByDomain[0])
+        }
+        console.log('Valor datavt', dataVP, ' valor de loading', loadingVP, ' dominio ', dominio)
     }, [dataVT]);
 
+    const handleSelectVT = (event) => {
+        setVarietyType(event.target.value); // This will trigger a re-render with the new varietyType
+    };
     return (
         <>
             <div className='row align-items-start'>
@@ -26,7 +49,7 @@ function DatosDatasheetInstance({ dominio }) {
 
                             <Form.Group className="mb-2" controlId="tipoVariacion">
                                 <FloatingLabel controlId='floatingSelect' label='Seleccionar Tipo de Variación'>
-                                    <Form.Select aria-label='selector-tipo-variacion'>
+                                    <Form.Select aria-label='selector-tipo-variacion' onChange={handleSelectVT} {...register("selectorTipoVariedad", { required: false })}>
                                         {!loadingVT && !errorVT && dataVT && dataVT.getVarietyTypesByDomain.map((varietyType, index) => (
                                             <option key={index} value={varietyType.name}>{varietyType.name}</option>
                                         )
@@ -39,9 +62,10 @@ function DatosDatasheetInstance({ dominio }) {
                             <Form.Group className="mb-2" controlId="puntoVariacion">
                                 <FloatingLabel controlId='floatingSelect' label='Seleccionar Punto de Variación'>
                                     <Form.Select aria-label='selector-punto-variacion'>
-                                        <option value='1'> Dataset Estructurado</option>
-                                        <option value='2'> Dataset Semiestructurado</option>
-                                        <option value='2'> Dataset No Estructurado</option>
+                                        {!loadingVP && !errorVP && dataVP && dataVP.getVariationPointsByVarietyTypeAndDomain.map((variationPoint, index) => (
+                                            <option key={index} value={variationPoint.name}>{variationPoint.name}</option>
+                                        )
+                                        )}
                                     </Form.Select>
                                 </FloatingLabel>
 
