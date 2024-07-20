@@ -89,6 +89,14 @@ query Query($domain: InputDomain, $varietyType: InputVarietyType, $variationPoin
 }
 `;
 
+export const GET_VARIATIONS_BY_DOMAIN_VARIETYTYPE_VARIATIONPOINT = gql`
+query Query($domain: InputDomain, $varietyType: InputVarietyType, $variationPoint: InputVariationPoint) {
+  getVariationsByDomainVTVP(domain: $domain, varietyType: $varietyType, variationPoint: $variationPoint) {
+    name
+  }
+}
+`;
+
 export const CREATE_DATASHEET = gql`
 mutation Mutation($datasheet: InputDatasheet) {
   createDatasheet(datasheet: $datasheet)
