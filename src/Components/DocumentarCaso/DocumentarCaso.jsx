@@ -20,7 +20,7 @@ const [dominio, setDominio] = useState('');
         {!datosCasoIngresados ?
             <DatosCaso actualizarCasoIngresado={actualizarCasoIngresado}/>
             :
-            <DatosDatasheetInstance dominio={dominio}/>
+            <DatosDatasheetInstance dominio={dominio} nombreCaso={nombreCaso}/>
         }
             </> 
 
