@@ -7,6 +7,8 @@ import { useGetVarietyTypesByDomain } from '../../Methods/VarietyType';
 import { useGetVariationPointsByVarietyTypeAndDomain } from '../../Methods/VariationPoint';
 import { useForm } from 'react-hook-form';
 import { useGetVariationsByDomainVTVP } from '../../Methods/Variation';
+import { useCreateDatasheetInstance } from '../../Methods/DasheetInstance';
+import { useGetIdDatasheetByDomainVTVP } from '../../Methods/Datasheet';
 
 function DatosDatasheetInstance({ dominio, nombreCaso }) {
     const [variable, setVariable] = useState([
@@ -27,19 +29,16 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
     const [variation, setVariation] = useState(null);
     const { loadingVT, errorVT, dataVT } = useGetVarietyTypesByDomain(dominio);
 
-    const { register, formState: { errors }, handleSubmit, setValue, watch } = useForm(
-        {
-            defaultValues: {
-                //  dominio: '0', // Seteo el valor por defecto del selector
-                //selectorTipoVariedad: '',
-            },
-        }
-    );
+    
     //const seleccionPuntoVariacion = watch("selectorPuntoVariacion"); // Obtener el valor del selector de tipo de variedad
     //const { loadingVP, errorVP, dataVP } = useGetVariationPointsByVarietyTypeAndDomain(dominio);
     const { loadingVP, errorVP, dataVP } = useGetVariationPointsByVarietyTypeAndDomain(varietyType, dominio);
 
     const { loadingV, errorV, dataV } = useGetVariationsByDomainVTVP(dominio, varietyType, variationPoint);
+
+    const { createDatasheetInstance, loadingCreateDatasheet, errorCreateDatasheet, dataCreateDatasheet } = useCreateDatasheetInstance();
+
+    const { loadingId, errorId, dataId } = useGetIdDatasheetByDomainVTVP(dominio, varietyType, variationPoint);
 
     function useDataChangeEffect(data, callback) {
         const dataRef = useRef(data);
@@ -74,11 +73,11 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
         //console.log('valor dataVT: ', dataVT.getVarietyTypesByDomain[0].name)
         //    setVarietyType(dataVT.getVarietyTypesByDomain[0].name)
         //}
-        if (dataV) {
-            console.log('Valor datav', dataV, ' valor de loading')
+        if (dataId) {
+            console.log('Valor dataId', dataId.getDatasheetsByDomainVTVP, ' valor de loading')
         }
 
-    }, [dataV]);
+    }, [dataId]);
 
     const handleSelectVT = (event) => {
         //console.log('actualizo variable estado: ', event.target.value)
@@ -117,12 +116,23 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
         })
         return res
     }
+    const handleSubmit = () => {
+
+        if(dataId){
+            console.log(dataId)
+        }
+
+        // Invocar metodo que crea datasheet.
+        //createDatasheetInstance(dominio, varietyType, variationPoint, id, variation)
+
+    }
+
     //{...register("selectorTipoVariedad", { required: false })}
     return (
         <>
             <div className='row align-items-start'>
                 <div className='card col-md-4 ml-3 p-0'>
-                    <Form>
+                    <Form onSubmit={handleSubmit}>
                         <h5 className='fw-bold card-header w-100' >Seleccione variedades para el caso</h5>
                         <div className='card-body'>
 

@@ -102,6 +102,15 @@ mutation Mutation($datasheet: InputDatasheet) {
   createDatasheet(datasheet: $datasheet)
 }`;
 
+export const CREATE_DATASHEET_INSTANCE = gql`
+mutation Mutation($datasheetInstance: InputDatasheetInstance) {
+    createDatasheetInstance(datasheetInstance: $datasheetInstance)
+}`;
+
+export const CREATE_CASE = gql`
+mutation Mutation($case: InputCase) {
+  createCase(case: $InputCase)
+}`;
 
 export const ADD_VARIATIONS = gql`
 mutation Mutation($variations: [InputVariation], $idDatasheet: ID) {

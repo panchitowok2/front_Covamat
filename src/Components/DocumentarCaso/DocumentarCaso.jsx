@@ -7,7 +7,7 @@ const [datosCasoIngresados, setDatosCasoIngresados] = useState(false);
 const [nombreCaso, setNombreCaso] = useState('');
 const [dominio, setDominio] = useState('');
     const actualizarCasoIngresado = (nombreCaso, dominio) =>{
-        console.log('se llamo al metodo actualizar caso ingresado')
+        //console.log('se llamo al metodo actualizar caso ingresado')
         setDatosCasoIngresados(true);
         setNombreCaso(nombreCaso)
         setDominio(dominio)

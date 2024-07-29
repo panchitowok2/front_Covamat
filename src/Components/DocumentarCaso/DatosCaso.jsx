@@ -22,7 +22,7 @@ function DatosCaso({ actualizarCasoIngresado }) {
     }
 
     const handleSubmit = () => {
-        console.log('nombre: ', nombreCaso, ' dominio: ', dominio )
+        //console.log('nombre: ', nombreCaso, ' dominio: ', dominio )
         if (nombreCaso != '' && dominio != '' && dominio != 0) {
             actualizarCasoIngresado(nombreCaso, dominio);
         }
