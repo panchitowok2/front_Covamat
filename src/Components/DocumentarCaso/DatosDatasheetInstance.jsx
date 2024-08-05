@@ -5,7 +5,7 @@ import Table from 'react-bootstrap/Table';
 import { useState, useEffect, useRef } from 'react';
 import { useGetVarietyTypesByDomain } from '../../Methods/VarietyType';
 import { useGetVariationPointsByVarietyTypeAndDomain } from '../../Methods/VariationPoint';
-import { useForm } from 'react-hook-form';
+import { set, useForm } from 'react-hook-form';
 import { useGetVariationsByDomainVTVP } from '../../Methods/Variation';
 import { useCreateDatasheetInstance } from '../../Methods/DasheetInstance';
 import { useGetIdDatasheetByDomainVTVP } from '../../Methods/Datasheet';
@@ -27,9 +27,10 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
     const [varietyType, setVarietyType] = useState(null);
     const [variationPoint, setVariationPoint] = useState(null);
     const [variation, setVariation] = useState(null);
+    const [idDatasheetInstance, setIdDatasheetInstance] = useState(null);
     const { loadingVT, errorVT, dataVT } = useGetVarietyTypesByDomain(dominio);
 
-    
+
     //const seleccionPuntoVariacion = watch("selectorPuntoVariacion"); // Obtener el valor del selector de tipo de variedad
     //const { loadingVP, errorVP, dataVP } = useGetVariationPointsByVarietyTypeAndDomain(dominio);
     const { loadingVP, errorVP, dataVP } = useGetVariationPointsByVarietyTypeAndDomain(varietyType, dominio);
@@ -49,7 +50,7 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
         }
     }
 
-    // Luego puedes usar este hook en tu componente de la siguiente manera:
+    let idArr = []; // Arreglo donde guardo los id de los datasheet instance
 
     useDataChangeEffect(dataVT, () => {
         //console.log('dataDatasheet ha cambiado', dataDatasheet);
@@ -62,19 +63,33 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
     useDataChangeEffect(dataVP, () => {
         //console.log('dataDatasheet ha cambiado', dataDatasheet);
         // Aquí puedes llamar a tu método
-        if (!loadingVP && dataVP) {
+        if (!loadingVP && dataVP && dataVT) {
             setVariationPoint(dataVP.getVariationPointsByVarietyTypeAndDomain[0].name)
         }
     });
-
+    useDataChangeEffect(dataV, () => {
+        //console.log('dataDatasheet ha cambiado', dataDatasheet);
+        // Aquí puedes llamar a tu método
+        if (!loadingV && dataVP && dataVT && dataV) {
+            setVariation(dataV.getVariationsByDomainVTVP[0].name)
+        }
+    });
+    useDataChangeEffect(idDatasheetInstance, () => {
+        console.log('idDatasheetInstance ha cambiado', idDatasheetInstance);
+        // Aquí puedes llamar a tu método
+        if (idDatasheetInstance) {
+            console.log("id del datasheet instance creado: ", idDatasheetInstance)
+            idArr.push(idDatasheetInstance)
+        }
+    });
     useEffect(() => {
         // llamo a los metodos que obtienen datos nuevamente
         //if (dataVT) {
         //console.log('valor dataVT: ', dataVT.getVarietyTypesByDomain[0].name)
         //    setVarietyType(dataVT.getVarietyTypesByDomain[0].name)
         //}
-        if (dataId) {
-            console.log('Valor dataId', dataId.getDatasheetsByDomainVTVP, ' valor de loading')
+        if (dataId && dataId.getDatasheetByDomainVTVP) {
+            console.log('Valor dataId', dataId.getDatasheetByDomainVTVP[0]._id, ' valor de variation', variation)
         }
 
     }, [dataId]);
@@ -98,9 +113,9 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
         // arreglo.  
         if (buscarDatasheetEnArreglo) {
             // Esta el datasheet en el arreglo
-        }else{
+        } else {
             // No esta el datasheet en el arreglo
-            
+
         }
     };
 
@@ -116,14 +131,19 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
         })
         return res
     }
-    const handleSubmit = () => {
-
-        if(dataId){
+    const handleSubmit = async (event) => {
+        event.preventDefault(); // evita que el submit refresque la pagina
+        const auxVar = { name: variation } // aca van tambien las variables
+        const variationArr = [auxVar];
+        if (dataId) {
             console.log(dataId)
-        }
 
-        // Invocar metodo que crea datasheet.
-        //createDatasheetInstance(dominio, varietyType, variationPoint, id, variation)
+            // Invocar metodo que crea datasheet. 
+            const newIdDatasheetInstance = await createDatasheetInstance(dominio, varietyType, variationPoint, dataId.getDatasheetByDomainVTVP[0]._id, variationArr) 
+            setIdDatasheetInstance(newIdDatasheetInstance)
+            // Asignar Id de datasheet a el caso que estoy creando.
+
+        }
 
     }
 

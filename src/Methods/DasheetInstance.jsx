@@ -13,8 +13,8 @@ export function useCreateDatasheetInstance() {
                     varietyType: { name: varietyType },
                     variationPoint: { name: variationPoint },
                     name: null,
-                    idDatasheet,
-                    variation
+                    id_datasheet: idDatasheet,
+                    variations: variation
                 }
             }
         });
