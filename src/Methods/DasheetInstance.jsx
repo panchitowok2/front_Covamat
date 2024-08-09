@@ -5,8 +5,8 @@ export function useCreateDatasheetInstance() {
     const [createDatasheet, { loading: loadingCreateDatasheet, error: errorCreateDatasheet, data: dataCreateDatasheet }] = useMutation(CREATE_DATASHEET_INSTANCE);
     console.log('antes de entrar a createDatasheet')
 
-    const createDatasheetInstance = (dominio, varietyType, variationPoint, idDatasheet, variation) => {
-        createDatasheet({
+    const createDatasheetInstance = async (dominio, varietyType, variationPoint, idDatasheet, variation) => {
+        const response = await createDatasheet({
             variables: {
                 datasheetInstance: {
                     domain: { name: dominio },
@@ -18,6 +18,8 @@ export function useCreateDatasheetInstance() {
                 }
             }
         });
+        const newIdDatasheetInstance = response.data.createDatasheetInstance.id;
+        return newIdDatasheetInstance;
     };
     
     return { createDatasheetInstance, loadingCreateDatasheet, errorCreateDatasheet, dataCreateDatasheet };

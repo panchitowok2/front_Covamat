@@ -11,7 +11,8 @@ function DatosCaso({ actualizarCasoIngresado }) {
     });
 
     const [nombreCaso, setNombreCaso] = useState('');
-    const [dominio, setDominio] = useState('');
+    const [dominio, setDominio] = useState('0');
+    const [descripcion, setDescripcion] = useState('');
 
     const handleNombreCasoChange = (event) => {
         setNombreCaso(event.target.value);
@@ -21,10 +22,15 @@ function DatosCaso({ actualizarCasoIngresado }) {
         setDominio(event.target.value)
     }
 
-    const handleSubmit = () => {
+    const handleDescripcion = (event) => {
+        setDescripcion(event.target.value)
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault(); // evita que el submit refresque la pagina
         //console.log('nombre: ', nombreCaso, ' dominio: ', dominio )
-        if (nombreCaso != '' && dominio != '' && dominio != 0) {
-            actualizarCasoIngresado(nombreCaso, dominio);
+        if (nombreCaso !== '' && dominio !== '' && dominio !== 0) {
+            actualizarCasoIngresado(nombreCaso, dominio, descripcion);
         }
 
     }
@@ -41,7 +47,7 @@ function DatosCaso({ actualizarCasoIngresado }) {
                                     label='Ingresar nombre del caso'
                                     className='mb-2'>
                                     <Form.Control placeholder="Ingresar nombre" value={nombreCaso}
-                                        onChange={handleNombreCasoChange} required/>
+                                        onChange={handleNombreCasoChange} required />
 
                                 </FloatingLabel>
                             </Form.Group>
@@ -58,7 +64,21 @@ function DatosCaso({ actualizarCasoIngresado }) {
                                 </FloatingLabel>
 
                             </Form.Group>
-                            <Button className='float-end mb-2' variant="primary" type="submit">
+                            <Form.Group className="mb-2" controlId="Descripción">
+                                <FloatingLabel
+                                    controlId='floatingTextarea'
+                                    label='Ingresar descripcón'
+                                    className='mb-2'>
+                                    <Form.Control
+                                        as="textarea"
+                                        placeholder="Ingresar descripción"
+                                        value={descripcion}
+                                        onChange={handleDescripcion}
+                                        required 
+                                        style={{ height: '20vh' }}/>
+                                </FloatingLabel>
+                            </Form.Group>
+                            <Button className='float-end mb-2' variant="primary" type="submit" disabled={dominio === '0' || nombreCaso === ''}>
                                 Siguiente
                             </Button>
                         </div>

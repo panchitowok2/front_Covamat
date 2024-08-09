@@ -6,11 +6,14 @@ function DocumentarCaso() {
 const [datosCasoIngresados, setDatosCasoIngresados] = useState(false);
 const [nombreCaso, setNombreCaso] = useState('');
 const [dominio, setDominio] = useState('');
-    const actualizarCasoIngresado = (nombreCaso, dominio) =>{
+const [desc, setDesc] = useState('');
+
+    const actualizarCasoIngresado = (nombreCaso, dominio, descripcion) =>{
         //console.log('se llamo al metodo actualizar caso ingresado')
         setDatosCasoIngresados(true);
         setNombreCaso(nombreCaso)
         setDominio(dominio)
+        setDesc(descripcion)
     }
 
     return (

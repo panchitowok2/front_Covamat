@@ -40,7 +40,21 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
     const { createDatasheetInstance, loadingCreateDatasheet, errorCreateDatasheet, dataCreateDatasheet } = useCreateDatasheetInstance();
 
     const { loadingId, errorId, dataId } = useGetIdDatasheetByDomainVTVP(dominio, varietyType, variationPoint);
-
+    /*
+    let variationArr = null;
+    const [createDatasheet, { loading: loadingCreateDatasheet, error: errorCreateDatasheet, data: dataCreateDatasheet }] = useMutation(CREATE_DATASHEET_INSTANCE, {
+        variables: {
+            datasheetInstance: {
+                domain: { name: dominio },
+                varietyType: { name: varietyType },
+                variationPoint: { name: variationPoint },
+                name: null,
+                id_datasheet: dataId.getDatasheetByDomainVTVP[0]._id,
+                variations: variationArr
+            }
+        }
+    });
+    */
     function useDataChangeEffect(data, callback) {
         const dataRef = useRef(data);
 
@@ -74,12 +88,12 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
             setVariation(dataV.getVariationsByDomainVTVP[0].name)
         }
     });
-    useDataChangeEffect(idDatasheetInstance, () => {
-        console.log('idDatasheetInstance ha cambiado', idDatasheetInstance);
+    useDataChangeEffect(dataCreateDatasheet, () => {
+        console.log('dataCreateDatasheet ha cambiado', dataCreateDatasheet);
         // Aquí puedes llamar a tu método
-        if (idDatasheetInstance) {
-            console.log("id del datasheet instance creado: ", idDatasheetInstance)
-            idArr.push(idDatasheetInstance)
+        if (dataCreateDatasheet.createDatasheetInstance) {
+            console.log("agrego al id del datasheet instance al arreglo del caso: ", dataCreateDatasheet.createDatasheetInstance)
+            idArr.push(dataCreateDatasheet.createDatasheetInstance)
         }
     });
     useEffect(() => {
@@ -89,7 +103,7 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
         //    setVarietyType(dataVT.getVarietyTypesByDomain[0].name)
         //}
         if (dataId && dataId.getDatasheetByDomainVTVP) {
-            console.log('Valor dataId', dataId.getDatasheetByDomainVTVP[0]._id, ' valor de variation', variation)
+            //console.log('Valor dataId', dataId.getDatasheetByDomainVTVP[0]._id, ' valor de variation', variation)
         }
 
     }, [dataId]);
@@ -133,14 +147,13 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
     }
     const handleSubmit = async (event) => {
         event.preventDefault(); // evita que el submit refresque la pagina
-        const auxVar = { name: variation } // aca van tambien las variables
+        const auxVar = { name: variation, variables: null } // aca van tambien las variables
         const variationArr = [auxVar];
         if (dataId) {
             console.log(dataId)
-
             // Invocar metodo que crea datasheet. 
-            const newIdDatasheetInstance = await createDatasheetInstance(dominio, varietyType, variationPoint, dataId.getDatasheetByDomainVTVP[0]._id, variationArr) 
-            setIdDatasheetInstance(newIdDatasheetInstance)
+            await createDatasheetInstance(dominio, varietyType, variationPoint, dataId.getDatasheetByDomainVTVP[0]._id, variationArr)
+            //setIdDatasheetInstance(newIdDatasheetInstance)
             // Asignar Id de datasheet a el caso que estoy creando.
 
         }
@@ -191,48 +204,51 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
                                 </FloatingLabel>
 
                             </Form.Group>
+                            {varietyType == 'procesamiento' ?
+                            <>
+                                <Table striped bordered hover size='sm'>
+                                    <thead>
+                                        <tr>
+                                            <th colSpan={3}>Ingresar Variables</th>
+                                        </tr>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nombre</th>
+                                            <th>Valor</th>
+                                        </tr>
+                                    </thead>
+                                    {/*Recorro el arreglo que guarda las cariables almacenadas */}
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td><input className='no-outline border-0 bg-transparent w-100' onChange={handleInputVar} /></td>
+                                            <td><input className='no-outline border-0 bg-transparent w-100' /></td>
+                                        </tr>
+                                    </tbody>
+                                </Table>
 
-                            <Table striped bordered hover size='sm'>
-                                <thead>
-                                    <tr>
-                                        <th colSpan={3}>Ingresar Variables</th>
-                                    </tr>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Nombre</th>
-                                        <th>Valor</th>
-                                    </tr>
-                                </thead>
-                                {/*Recorro el arreglo que guarda las cariables almacenadas */}
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td><input className='no-outline border-0 bg-transparent w-100' onChange={handleInputVar} /></td>
-                                        <td><input className='no-outline border-0 bg-transparent w-100' /></td>
-                                    </tr>
-                                </tbody>
-                            </Table>
-
-                            <Table striped bordered hover size='sm'>
-                                <thead>
-                                    <tr>
-                                        <th colSpan={3}>Ingresar Conjunto de valores</th>
-                                    </tr>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Nombre</th>
-                                        <th>Valor</th>
-                                    </tr>
-                                </thead>
-                                {/*Recorro el arreglo que guarda las cariables almacenadas */}
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td><input className='no-outline border-0 bg-transparent w-100' /></td>
-                                        <td><input className='no-outline border-0 bg-transparent w-100' /></td>
-                                    </tr>
-                                </tbody>
-                            </Table>
+                                <Table striped bordered hover size='sm'>
+                                    <thead>
+                                        <tr>
+                                            <th colSpan={3}>Ingresar Conjunto de valores</th>
+                                        </tr>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nombre</th>
+                                            <th>Valor</th>
+                                        </tr>
+                                    </thead>
+                                    {/*Recorro el arreglo que guarda las cariables almacenadas */}
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td><input className='no-outline border-0 bg-transparent w-100' /></td>
+                                            <td><input className='no-outline border-0 bg-transparent w-100' /></td>
+                                        </tr>
+                                    </tbody>
+                                </Table>
+                            </>
+                            : <></> }
 
                             <Button className='float-end mb-2' variant="primary" type="submit">
                                 Agregar
