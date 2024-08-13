@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 
 export function useCreateDatasheetInstance() {
     const [createDatasheet, { loading: loadingCreateDatasheet, error: errorCreateDatasheet, data: dataCreateDatasheet }] = useMutation(CREATE_DATASHEET_INSTANCE);
-    console.log('antes de entrar a createDatasheet')
+    //console.log('antes de entrar a createDatasheet')
 
     const createDatasheetInstance = async (dominio, varietyType, variationPoint, idDatasheet, variation) => {
         const response = await createDatasheet({

@@ -10,6 +10,7 @@ export function useGetIdDatasheetByDomainVTVP(domain, vt, vp) {
         },
         fetchPolicy: "network-only"
     });
+    console.log('se llame al metodo que obtiene el id del datasheet', domain, vt, vp)
 
     return { loadingId, errorId, dataId };
 }

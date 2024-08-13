@@ -7,8 +7,9 @@ const [datosCasoIngresados, setDatosCasoIngresados] = useState(false);
 const [nombreCaso, setNombreCaso] = useState('');
 const [dominio, setDominio] = useState('');
 const [desc, setDesc] = useState('');
+const [variations, setVariations] = useState([])
 
-    const actualizarCasoIngresado = (nombreCaso, dominio, descripcion) =>{
+    const actualizarCasoIngresado = (nombreCaso, dominio, descripcion) => {
         //console.log('se llamo al metodo actualizar caso ingresado')
         setDatosCasoIngresados(true);
         setNombreCaso(nombreCaso)
@@ -16,6 +17,10 @@ const [desc, setDesc] = useState('');
         setDesc(descripcion)
     }
 
+    const actualizarVariations = (arr) => {
+        console.log('Actualizo arreglo variations: ', arr)
+        setVariations(arr)
+    }
     return (
         <>
         <h2>Documentar Caso</h2>
@@ -23,7 +28,7 @@ const [desc, setDesc] = useState('');
         {!datosCasoIngresados ?
             <DatosCaso actualizarCasoIngresado={actualizarCasoIngresado}/>
             :
-            <DatosDatasheetInstance dominio={dominio} nombreCaso={nombreCaso}/>
+            <DatosDatasheetInstance dominio={dominio} nombreCaso={nombreCaso} actualizarVariations={actualizarVariations} />
         }
             </> 
 

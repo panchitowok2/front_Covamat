@@ -10,7 +10,7 @@ import { useGetVariationsByDomainVTVP } from '../../Methods/Variation';
 import { useCreateDatasheetInstance } from '../../Methods/DasheetInstance';
 import { useGetIdDatasheetByDomainVTVP } from '../../Methods/Datasheet';
 
-function DatosDatasheetInstance({ dominio, nombreCaso }) {
+function DatosDatasheetInstance({ dominio, nombreCaso, actualizarVariations }) {
     const [variable, setVariable] = useState([
         {
             dominio: '',
@@ -28,6 +28,8 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
     const [variationPoint, setVariationPoint] = useState(null);
     const [variation, setVariation] = useState(null);
     const [idDatasheetInstance, setIdDatasheetInstance] = useState(null);
+    const [idArr, setIdArr] = useState([])
+
     const { loadingVT, errorVT, dataVT } = useGetVarietyTypesByDomain(dominio);
 
 
@@ -64,12 +66,12 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
         }
     }
 
-    let idArr = []; // Arreglo donde guardo los id de los datasheet instance
+    //let idArr = []; // Arreglo donde guardo los id de los datasheet instance
 
     useDataChangeEffect(dataVT, () => {
         //console.log('dataDatasheet ha cambiado', dataDatasheet);
         // Aquí puedes llamar a tu método
-        if (!loadingVT && dataVT) {
+        if (!loadingVT && !errorVT && dataVT) {
             setVarietyType(dataVT.getVarietyTypesByDomain[0].name)
         }
     });
@@ -77,23 +79,27 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
     useDataChangeEffect(dataVP, () => {
         //console.log('dataDatasheet ha cambiado', dataDatasheet);
         // Aquí puedes llamar a tu método
-        if (!loadingVP && dataVP && dataVT) {
+        if (!loadingVP && !errorVP && dataVP && dataVT) {
             setVariationPoint(dataVP.getVariationPointsByVarietyTypeAndDomain[0].name)
         }
     });
     useDataChangeEffect(dataV, () => {
         //console.log('dataDatasheet ha cambiado', dataDatasheet);
         // Aquí puedes llamar a tu método
-        if (!loadingV && dataVP && dataVT && dataV) {
+        if (!loadingV && !errorV && dataVP && dataVT && dataV) {
             setVariation(dataV.getVariationsByDomainVTVP[0].name)
         }
     });
     useDataChangeEffect(dataCreateDatasheet, () => {
         console.log('dataCreateDatasheet ha cambiado', dataCreateDatasheet);
         // Aquí puedes llamar a tu método
-        if (dataCreateDatasheet.createDatasheetInstance) {
+        if (!loadingCreateDatasheet && !errorCreateDatasheet && dataCreateDatasheet.createDatasheetInstance) {
             console.log("agrego al id del datasheet instance al arreglo del caso: ", dataCreateDatasheet.createDatasheetInstance)
-            idArr.push(dataCreateDatasheet.createDatasheetInstance)
+            if(!idArr){
+                setIdArr(dataCreateDatasheet.createDatasheetInstance)
+            }else{
+                idArr.push(dataCreateDatasheet.createDatasheetInstance)
+            }
         }
     });
     useEffect(() => {
@@ -157,6 +163,11 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
             // Asignar Id de datasheet a el caso que estoy creando.
 
         }
+
+    }
+    const handleSubmitCase = async (event) => {
+        event.preventDefault(); // evita que el submit refresque la pagina
+        actualizarVariations(idArr)
 
     }
 
@@ -258,10 +269,13 @@ function DatosDatasheetInstance({ dominio, nombreCaso }) {
                     </Form>
                 </div>
                 <div className='card col-md-4 ml-3 p-0'>
-                    <Form>
+                    <Form onSubmit={handleSubmitCase}>
                         <h5 className='fw-bold card-header w-100'>Datos del Caso</h5>
-                        <Form.Group className="mb-2 card-body" controlId="datosCaso">
+                        <Form.Group className="mb-2 card-body position-relative" controlId="datosCaso">
                             <p>Nombre: {nombreCaso}</p>
+                            <Button className='position-absolute top-0 end-0 m-2' variant="primary" type="submit">
+                                Guardar
+                            </Button>
                             <p>Dominio: {dominio}</p>
                             <p>Variedades:</p>
                         </Form.Group>
