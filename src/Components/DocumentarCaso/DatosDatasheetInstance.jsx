@@ -99,6 +99,7 @@ function DatosDatasheetInstance({ dominio, nombreCaso, actualizarVariations }) {
                 setIdArr(dataCreateDatasheet.createDatasheetInstance)
             }else{
                 idArr.push(dataCreateDatasheet.createDatasheetInstance)
+                console.log("Agrego al array el nuevo id de datasheet", idArr)
             }
         }
     });
@@ -156,7 +157,7 @@ function DatosDatasheetInstance({ dominio, nombreCaso, actualizarVariations }) {
         const auxVar = { name: variation, variables: null } // aca van tambien las variables
         const variationArr = [auxVar];
         if (dataId) {
-            console.log(dataId)
+            console.log('evento handleSubmit, valor de dataid: ',dataId)
             // Invocar metodo que crea datasheet. 
             await createDatasheetInstance(dominio, varietyType, variationPoint, dataId.getDatasheetByDomainVTVP[0]._id, variationArr)
             //setIdDatasheetInstance(newIdDatasheetInstance)
@@ -167,7 +168,13 @@ function DatosDatasheetInstance({ dominio, nombreCaso, actualizarVariations }) {
     }
     const handleSubmitCase = async (event) => {
         event.preventDefault(); // evita que el submit refresque la pagina
-        actualizarVariations(idArr)
+        console.log('hanldeSubmit de guardar caso: ')
+        if(idArr.length > 0){
+            // si el usuario guardo al menos una instancia de datasheet
+            // añadir arreglo de variaciones al caso y terminar el proceso
+            actualizarVariations(idArr) 
+        }
+        
 
     }
 
@@ -273,7 +280,10 @@ function DatosDatasheetInstance({ dominio, nombreCaso, actualizarVariations }) {
                         <h5 className='fw-bold card-header w-100'>Datos del Caso</h5>
                         <Form.Group className="mb-2 card-body position-relative" controlId="datosCaso">
                             <p>Nombre: {nombreCaso}</p>
-                            <Button className='position-absolute top-0 end-0 m-2' variant="primary" type="submit">
+                            <Button className='position-absolute top-0 end-0 m-2' 
+                            variant="primary" 
+                            type="submit"
+                            disabled={idArr.length === 0} >
                                 Guardar
                             </Button>
                             <p>Dominio: {dominio}</p>
