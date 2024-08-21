@@ -10,7 +10,7 @@ import { useGetVariationsByDomainVTVP } from '../../Methods/Variation';
 import { useCreateDatasheetInstance } from '../../Methods/DasheetInstance';
 import { useGetIdDatasheetByDomainVTVP } from '../../Methods/Datasheet';
 
-function DatosDatasheetInstance({ dominio, nombreCaso, actualizarVariations }) {
+function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
     const [variable, setVariable] = useState([
         {
             dominio: '',
@@ -172,7 +172,7 @@ function DatosDatasheetInstance({ dominio, nombreCaso, actualizarVariations }) {
         if(idArr.length > 0){
             // si el usuario guardo al menos una instancia de datasheet
             // añadir arreglo de variaciones al caso y terminar el proceso
-            actualizarVariations(idArr) 
+            mostrarConfirmar(idArr)
         }
         
 
