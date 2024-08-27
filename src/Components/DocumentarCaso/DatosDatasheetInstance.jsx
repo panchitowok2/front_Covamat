@@ -91,27 +91,6 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
                 idArr.push(dataCreateDatasheet.createDatasheetInstance)
                 console.log("Agrego al array el nuevo id de datasheet", idArr)
             }
-            if (variable.length === 0) {
-                setVariable([{
-                    id: dataCreateDatasheet.createDatasheetInstance,
-                    dominio: dominio,
-                    varietyType: varietyType,
-                    variationPoint: variationPoint,
-                    variations: [{
-                        name: auxVar.name
-                    }]
-                }])
-            } else {
-                variable.push({
-                    id: dataCreateDatasheet.createDatasheetInstance,
-                    dominio: dominio,
-                    varietyType: varietyType,
-                    variationPoint: variationPoint,
-                    variations: [{
-                        name: auxVar.name
-                    }]
-                })
-            }
             //console.log('el arreglo donde voy guardando los datasheet instance: ', variable)
         }
     });
@@ -141,42 +120,21 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
     };
     const handleInputVar = (event) => {
         //console.log('actualizo campo input var: ', event.target.value)
-        // Busco el datasheet en el arreglo de variables, si esta, tengo que buscar la variable que estoy 
-        // actualizando y actualizarla con el nuevo valor. Si no esta debo guardar el datasheet en el
-        // arreglo.  
-        if (buscarDatasheetEnArreglo) {
-            // Esta el datasheet en el arreglo
-        } else {
-            // No esta el datasheet en el arreglo
-
-        }
     };
 
-    const buscarDatasheetEnArreglo = () => {
-        let res = false;
-        variable.map((datasheet, index) => {
-            if (datasheet.dominio == dominio &&
-                datasheet.varietyType == varietyType &&
-                datasheet.variationPoint == variationPoint &&
-                datasheet.variable == variable) {
-                res = true
-            }
-        })
-        return res
-    }
     const handleSubmit = async (event) => {
         event.preventDefault(); // evita que el submit refresque la pagina
         auxVar = { name: variation, variables: null } // aca van tambien las variables
         variationArr = [auxVar];
         if (dataId) {
             console.log('evento handleSubmit, valor de dataid: ', dataId)
-            if (variable.length === 0) {
+            //if (variable.length === 0) {
                 // Si no cree ninguna instancia de datasheet creo la primera
                 // Invocar metodo que crea datasheet. 
                 await createDatasheetInstance(dominio, varietyType, variationPoint, dataId.getDatasheetByDomainVTVP[0]._id, variationArr)
-            } else {
-                console.log('Ya hay una instancia de datasheet agregada: ', variable )
-            }
+            //} else {
+            //    console.log('Ya hay una instancia de datasheet agregada: ', variable )
+            //}
 
             //setIdDatasheetInstance(newIdDatasheetInstance)
             // Asignar Id de datasheet a el caso que estoy creando.
