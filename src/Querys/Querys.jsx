@@ -97,6 +97,13 @@ query Query($domain: InputDomain, $varietyType: InputVarietyType, $variationPoin
 }
 `;
 
+export const GET_IS_DATASHEET_INSTANCE_IN_CASE = gql`
+query Query($idDatasheetInstanceArray: [ID], $inputDatasheetInstance: InputDatasheetInstance) {
+  getIsDatasheetInstanceInCase(idDatasheetInstanceArray: $idDatasheetInstanceArray, inputDatasheetInstance: $inputDatasheetInstance)
+}
+`;
+
+
 export const CREATE_DATASHEET = gql`
 mutation Mutation($datasheet: InputDatasheet) {
   createDatasheet(datasheet: $datasheet)
