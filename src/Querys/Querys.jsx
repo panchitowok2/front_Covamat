@@ -127,6 +127,6 @@ mutation Mutation($variations: [InputVariation], $idDatasheet: ID) {
 
 export const ADD_VARIATIONS_TO_CASE = gql`
 mutation Mutation($idCase: ID, $variations: [ID]) {
-  addVariations(idCase: $idCase, variations: $variations)
+  addDatasheetInstancesToCase(idCase: $idCase, variations: $variations)
 }
 `;

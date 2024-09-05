@@ -3,17 +3,15 @@ import Form from 'react-bootstrap/Form';
 import { FloatingLabel } from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import { useState, useEffect, useRef } from 'react';
-import { useGetVarietyTypesByDomain } from '../../Methods/VarietyType';
-import { useGetVariationPointsByVarietyTypeAndDomain } from '../../Methods/VariationPoint';
 import { set, useForm } from 'react-hook-form';
-import { useGetVariationsByDomainVTVP } from '../../Methods/Variation';
-import { useCreateDatasheetInstance } from '../../Methods/DasheetInstance';
-import { useGetIdDatasheetByDomainVTVP } from '../../Methods/Datasheet';
-//import { useGetIsDatasheetInstanceInCase } from '../../Methods/Case';
-import { GET_IS_DATASHEET_INSTANCE_IN_CASE, GET_VARIETYTYPES_BY_DOMAIN,
-     GET_VARIATIONPOINTS_BY_VARIETYTYPE_AND_DOMAIN,
-     GET_VARIATIONS_BY_DOMAIN_VARIETYTYPE_VARIATIONPOINT } from '../../Querys/Querys';
-import { useLazyQuery, useQuery } from '@apollo/client';
+import {
+    GET_IS_DATASHEET_INSTANCE_IN_CASE, GET_VARIETYTYPES_BY_DOMAIN,
+    GET_VARIATIONPOINTS_BY_VARIETYTYPE_AND_DOMAIN,
+    GET_VARIATIONS_BY_DOMAIN_VARIETYTYPE_VARIATIONPOINT,
+    CREATE_DATASHEET_INSTANCE,
+    GET_DATASHEETS_BY_DOMAIN_VARIETYTYPE_VARIATIONPOINT
+} from '../../Querys/Querys';
+import { useLazyQuery, useQuery, useMutation } from '@apollo/client';
 import Alert from 'react-bootstrap/Alert';
 
 function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
@@ -21,7 +19,7 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
     const [varietyType, setVarietyType] = useState(null);
     const [variationPoint, setVariationPoint] = useState(null);
     const [variation, setVariation] = useState(null);
-    const [idDatasheetInstance, setIdDatasheetInstance] = useState(null);
+    const [idDatasheet, setIdDatasheet] = useState(null);
     const [idArr, setIdArr] = useState([])
     const [showAlert, setShowAlert] = useState(false);
     const [variant, setVariant] = useState(null)
@@ -31,14 +29,14 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
     let variationArr = []
 
     const { loading: loadingVT, error: errorVT, data: dataVT } = useQuery(GET_VARIETYTYPES_BY_DOMAIN,
-    {
-           variables: { domain: { name: dominio } },
-           fetchPolicy: "network-only"
-    });
+        {
+            variables: { domain: { name: dominio } },
+            fetchPolicy: "network-only"
+        });
     //const seleccionPuntoVariacion = watch("selectorPuntoVariacion"); // Obtener el valor del selector de tipo de variedad
     //const { loadingVP, errorVP, dataVP } = useGetVariationPointsByVarietyTypeAndDomain(dominio);
-    const { loading: loadingVP, error: errorVP, data: dataVP } = useQuery(GET_VARIATIONPOINTS_BY_VARIETYTYPE_AND_DOMAIN,{
-        variables: { varietyType: {name: varietyType}, domain: { name: dominio } },
+    const { loading: loadingVP, error: errorVP, data: dataVP } = useQuery(GET_VARIATIONPOINTS_BY_VARIETYTYPE_AND_DOMAIN, {
+        variables: { varietyType: { name: varietyType }, domain: { name: dominio } },
         fetchPolicy: "network-only"
     });
 
@@ -47,30 +45,24 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
         fetchPolicy: "network-only"
     });
 
-    const { createDatasheetInstance, loadingCreateDatasheet, errorCreateDatasheet, dataCreateDatasheet } = useCreateDatasheetInstance();
+    const [createDatasheetInstance, { loading: loadingCreateDatasheet, error: errorCreateDatasheet, data: dataCreateDatasheet }] = useMutation(CREATE_DATASHEET_INSTANCE);
 
-    const { loadingId, errorId, dataId } = useGetIdDatasheetByDomainVTVP(dominio, varietyType, variationPoint);
-
-    //const { DInCaseCall, loadingDInCase, errorDInCase, dataDInCase } = useGetIsDatasheetInstanceInCase();
+    const [getDatasheetId, { loading: loadingId, error: errorId, data: dataId }] = useLazyQuery(GET_DATASHEETS_BY_DOMAIN_VARIETYTYPE_VARIATIONPOINT, {
+        fetchPolicy: "network-only"
+    });
 
     const [isDatasheetInstanceInCase, { loading: loadingDInCase, error: errorDInCase, data: dataDInCase }] = useLazyQuery(GET_IS_DATASHEET_INSTANCE_IN_CASE, {
         fetchPolicy: "network-only"
     });
-    /*
-    let variationArr = null;
-    const [createDatasheet, { loading: loadingCreateDatasheet, error: errorCreateDatasheet, data: dataCreateDatasheet }] = useMutation(CREATE_DATASHEET_INSTANCE, {
-        variables: {
-            datasheetInstance: {
-                domain: { name: dominio },
-                varietyType: { name: varietyType },
-                variationPoint: { name: variationPoint },
-                name: null,
-                id_datasheet: dataId.getDatasheetByDomainVTVP[0]._id,
-                variations: variationArr
-            }
-        }
-    });
-    */
+
+    // Evento para mostrar mensajes
+    const showAlertMessage = (header, variant, message) => {
+        setVariant(variant)
+        setMsgAlertHeader(header)
+        setMsgAlert(message)
+        setShowAlert(true)
+    }
+
     function useDataChangeEffect(data, callback) {
         const dataRef = useRef(data);
 
@@ -79,8 +71,6 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
             dataRef.current = data;
         }
     }
-
-    //let idArr = []; // Arreglo donde guardo los id de los datasheet instance
 
     useDataChangeEffect(dataVT, () => {
         //console.log('dataDatasheet ha cambiado', dataDatasheet);
@@ -100,25 +90,38 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
     useDataChangeEffect(dataV, () => {
         //console.log('dataDatasheet ha cambiado', dataDatasheet);
         // Aquí puedes llamar a tu método
-        if (!loadingV && !errorV && dataVP && dataVT && dataV) {
+        if (!loadingV && !errorV && dataVP && dataVT && dataV.getVariationsByDomainVTVP) {
             setVariation(dataV.getVariationsByDomainVTVP[0].name)
+            getDatasheetId({
+                variables: {
+                    domain: { name: dominio },
+                    varietyType: { name: varietyType },
+                    variationPoint: { name: variationPoint }
+
+                }
+            })
+        }
+    });
+    useDataChangeEffect(dataId, () => {
+        //console.log('dataDatasheet ha cambiado', dataDatasheet);
+        // Obtengo id del datasheet documentado por el servicio 1
+        if (!loadingId && !errorId && dataId && dataId.getDatasheetByDomainVTVP) {
+            //console.log('obtengo dataId ', dataId.getDatasheetByDomainVTVP[0]._id)
+            setIdDatasheet(dataId.getDatasheetByDomainVTVP[0]._id)
         }
     });
     useDataChangeEffect(dataCreateDatasheet, () => {
-        console.log('dataCreateDatasheet ha cambiado', dataCreateDatasheet);
+        //console.log('dataCreateDatasheet ha cambiado', dataCreateDatasheet);
         // Aquí puedes llamar a tu método
-        if (!loadingCreateDatasheet && !errorCreateDatasheet && dataCreateDatasheet.createDatasheetInstance) {
-            console.log("agrego al id del datasheet instance al arreglo del caso: ", dataCreateDatasheet.createDatasheetInstance)
+        if (!loadingCreateDatasheet && !errorCreateDatasheet && dataCreateDatasheet && dataCreateDatasheet.createDatasheetInstance) {
+            //console.log("agrego al id del datasheet instance al arreglo del caso: ", dataCreateDatasheet.createDatasheetInstance)
             if (!idArr) {
                 setIdArr(dataCreateDatasheet.createDatasheetInstance)
             } else {
                 idArr.push(dataCreateDatasheet.createDatasheetInstance)
-                console.log("Agrego al array el nuevo id de datasheet", idArr)
+                //console.log("Agrego al array el nuevo id de datasheet", idArr)
             }
-            setVariant('success')
-            setMsgAlertHeader('Exito')
-            setMsgAlert('Datasheet Instance añadida al caso')
-            setShowAlert(true)
+            showAlertMessage('Exito', 'success', 'Datasheet Instance añadida al caso')
             //console.log('el arreglo donde voy guardando los datasheet instance: ', variable)
         }
     });
@@ -129,19 +132,29 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
         if (!loadingDInCase && !errorDInCase && dataDInCase) {
             console.log("cambio el valor de DInCase: ", dataDInCase.getIsDatasheetInstanceInCase)
             if (dataDInCase.getIsDatasheetInstanceInCase) {
-                console.log('La variacion ya esta en el caso')
-                setVariant('danger')
-                setMsgAlertHeader('Error')
-                setMsgAlert('La Datasheet Instance ingresada ya existe en el caso')
-                setShowAlert(true)
+                console.log('La variacion ya esta en el caso', dataDInCase.getIsDatasheetInstanceInCase, ' ', idArr)
+                showAlertMessage('Error', 'danger', 'La Datasheet Instance ingresada ya existe en el caso')
             } else {
                 console.log('Llamo a create datasheet instance')
                 auxVar = { name: variation, variables: null } // aca van tambien las variables
                 variationArr = [auxVar];
-                createDatasheetInstance(dominio, varietyType, variationPoint, dataId.getDatasheetByDomainVTVP[0]._id, variationArr)
+                //createDatasheetInstance(dominio, varietyType, variationPoint, dataId.getDatasheetByDomainVTVP[0]._id, variationArr)
+                createDatasheetInstance({
+                    variables: {
+                        datasheetInstance: {
+                            domain: { name: dominio },
+                            varietyType: { name: varietyType },
+                            variationPoint: { name: variationPoint },
+                            name: null,
+                            id_datasheet: dataId.getDatasheetByDomainVTVP[0]._id,
+                            variations: variationArr
+                        }
+                    }
+                });
             }
         }
     });
+
     useEffect(() => {
         // llamo a los metodos que obtienen datos nuevamente
         //if (dataVT) {
@@ -171,8 +184,9 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
         event.preventDefault(); // evita que el submit refresque la pagina
         auxVar = { name: variation, variables: null } // aca van tambien las variables
         variationArr = [auxVar];
-        if (dataId) {
-            console.log('evento handleSubmit, valor de dataid: ', dataId)
+        //console.log('entro a handleSubmit', idDatasheet)
+        if (!loadingDInCase && !errorDInCase && idDatasheet) {
+            //console.log('evento handleSubmit, valor de dataid: ', dataId)
             //if (variable.length === 0) {
             // Si no cree ninguna instancia de datasheet creo la primera
             // Invocar metodo que crea datasheet. 

@@ -11,7 +11,7 @@ function ModalConfirmarAlmacenarCaso({showConfirmar, setShowConfirmar, actualiza
     
     const handleSi = () => {
         actualizarVariations();
-        //setShowConfirmar(false);
+        setShowConfirmar(false);
     }
 
     return (
