@@ -7,6 +7,7 @@ import Profile from './profile.js';
 import { Link, BrowserRouter, Route, Routes } from 'react-router-dom';
 import Footer from './Footer/footer.jsx';
 import DocumentarCaso from './DocumentarCaso/DocumentarCaso.jsx'
+import ConsultarActivosDeDominio from './ConsultarActivosDeDominio/ConsultarActivosDeDominio.jsx'
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000',
@@ -25,6 +26,7 @@ export default function App() {
               <Link to="/servicios" className="nav-link mr-2 text-white">Servicios</Link>
               <Link to="/perfil" className="nav-link mr-2 text-white">Perfil</Link>
               <Link to="/documentarCaso" className="nav-link mr-2 text-white">Documentar Caso</Link>
+              <Link to="/consultarActivosDeDominio" className="nav-link mr-2 text-white">Consultar Activos</Link>
             </div>
           </div>
         </nav>
@@ -35,6 +37,7 @@ export default function App() {
             <Route path="/Servicios" element={<Servicios />} />
             <Route path="/Perfil" element={<Profile />} />
             <Route path="/DocumentarCaso" element={<DocumentarCaso />} />
+            <Route path="/ConsultarActivosDeDominio" element={<ConsultarActivosDeDominio />} />
           </Routes>
         </div>
           <Footer />
