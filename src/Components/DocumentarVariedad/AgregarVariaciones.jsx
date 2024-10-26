@@ -3,7 +3,7 @@ import { ADD_VARIATIONS } from '../../Querys/Querys.jsx';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@apollo/client';
 
-function AgregarVariaciones({ datasheet, setMostrarAgregarMasVariaciones, setShowConfirmar, resetInputs, setResetInputs, agregarVariaciones, setFinalizarTransaccion, setAgregarVariaciones }) {
+function AgregarVariaciones({ datasheet, setMostrarAgregarMasVariaciones, setShowConfirmar, resetInputs, setResetInputs, agregarVariaciones, setFinalizarTransaccion, setAgregarVariaciones, showAlertMessage }) {
 
     const { register, formState: { errors }, handleSubmit, setValue, watch } = useForm();
     const [agregarVariacionesBD, { loading: loadingAddVariations, error: errorAddVariations, data: dataAddVariations }] = useMutation(ADD_VARIATIONS);
@@ -53,6 +53,7 @@ function AgregarVariaciones({ datasheet, setMostrarAgregarMasVariaciones, setSho
             } else {
                 setFinalizarTransaccion(true)
             }
+            showAlertMessage('Éxito', 'success', 'Las variaciones fueron agregadas correctamente')
         } else {
             console.log('No se pudieron agregar las variaciones :(')
         }
@@ -98,7 +99,7 @@ function AgregarVariaciones({ datasheet, setMostrarAgregarMasVariaciones, setSho
     return (
         <>
             <div className='row align-items-start'>
-                <div className='card col-md-4 ml-3'>
+                <div className='card col-md-4 ml-3 p-0'>
                     <h5 className='card-header'>
                         Seleccione un datasheet para agregar variaciones:
                     </h5>

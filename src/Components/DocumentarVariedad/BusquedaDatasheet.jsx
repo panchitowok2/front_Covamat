@@ -27,6 +27,7 @@ function BusquedaDatasheet({ setIdDatasheet }) {
     const seleccionTipoVariacion = watch("selectorTipoVariedad"); // Obtener el valor del selector de tipo de variedad
     const puntoDeVariacion = watch("inputPuntoVariacion"); // Obtener el valor del selector de punto de variacion
     const puntoDeVariacionSelector = watch("selectorPuntoVariacion"); // Obtener el valor del selector de punto de variacion
+    const nombreDatasheet = watch("inputName"); // Obtener el valor del input de nombre de datasheet
 
     const { loading: loadingDomains, error: errorDomains, data: dataDomains, refetch } = useQuery(GET_DOMAINS, {
         fetchPolicy: "network-only"
@@ -61,6 +62,7 @@ function BusquedaDatasheet({ setIdDatasheet }) {
             //El usuario ingreso un dominio por texto, debo crear datasheet
         }
         */
+        console.log(data)
         await obtenerDatasheet({
             variables: {
                 domain: {
@@ -107,13 +109,16 @@ function BusquedaDatasheet({ setIdDatasheet }) {
 
         console.log('antes de entrar a createDatasheet', dom, vp)
         // llamo al metodo
+        if(seleccionTipoVariacion === null){
+            setValue("inputName", "")
+        }
         createDatasheet({
             variables: {
                 datasheet: {
                     domain: {
                         name: dom
                     },
-                    name: "datasheetPrueba",
+                    name: nombreDatasheet,
                     variationPoint: {
                         name: vp
                     },
@@ -188,6 +193,12 @@ function BusquedaDatasheet({ setIdDatasheet }) {
         //console.log('El valor del input de dominio es: ', event.target.value)
     };
 
+    // El usuario ingresa el nombre del datasheet
+    const entradaNombre = (event) => {
+        setValue("inputName", event.target.value)
+        //console.log('El valor del input de dominio es: ', event.target.value)
+    };
+
     //este metodo se llama cuando el usuario ingresa un dato en el campo de 
     //ingresar un tipo de variacion nuevo mediante TECLADO, y deshabilita el selector de tipo de variacion
     /*const entradaPuntoDeVariacion = (event) => {        
@@ -245,13 +256,18 @@ function BusquedaDatasheet({ setIdDatasheet }) {
         <>
 
             <div className='row align-items-start'>
-                <div className='card col-md-4 ml-3 p-0'>
+                <div className='card col-md-4 ml-3 p-0 left-column'>
                     <h5 className='card-header'>
                         Buscar datasheet:
                     </h5>
                     <form className="card-body" onSubmit={handleSubmit(onSubmit)}>
 
-                        <div className='form-floating'>
+                        <div className="form-floating">
+                            <input type="input3" className="form-control" id="inputName" placeholder="nombre del caso" {...register("inputName", { required: false })} onChange={entradaNombre} />
+                            <label htmlFor="inputName">Ingresar Nombre de la datasheet</label>
+                        </div>
+
+                        <div className='form-floating mt-2'>
                             <select className="form-control" id="selectDominio" {...register("dominio", { required: false })} disabled={deshablitarSelector} onChange={buscarDatasheetsPorDominio}>
                                 <option value='0'>Seleccionar dominio</option>
                                 {!loadingDomains && !errorDomains && dataDomains.getDomains && dataDomains.getDomains.map((dominio, index) => (
@@ -259,12 +275,12 @@ function BusquedaDatasheet({ setIdDatasheet }) {
                                 )
                                 )}
                             </select>
-                            <label for="selectDominio">Seleccionar Dominio</label>
+                            <label htmlFor="selectDominio">Seleccionar Dominio</label>
                         </div>
                         <label>Si no encuentra el dominio, escribalo a continuación: </label>
                         <div className="form-floating">
-                            <input type="input1" className="form-control" id="inputDominio" placeholder="dominio" {...register("inputDominio", { required: false, maxLength: 15 })} onChange={entradaDominio} />
-                            <label for="inputDominio">Ingresar Dominio</label>
+                            <input type="input1" className="form-control" id="inputDominio" placeholder="dominio" {...register("inputDominio", { required: false })} onChange={entradaDominio} />
+                            <label htmlFor="inputDominio">Ingresar Dominio</label>
                         </div>
                         <div className='form-floating mt-2'>
                             <select className="form-control" id="selectTipoVariedad" {...register("selectorTipoVariedad", { required: false })} onChange={buscarPuntosDeVariacion}>
@@ -274,7 +290,7 @@ function BusquedaDatasheet({ setIdDatasheet }) {
                                 <option value='contexto'>Contexto</option>
                                 <option value='contenido'>Contenido</option>
                             </select>
-                            <label for="selectTipoVariedad">Seleccionar Tipo de Variedad</label>
+                            <label htmlFor="selectTipoVariedad">Seleccionar Tipo de Variedad</label>
                         </div>
                         <div className='form-floating mt-2'>
                             <select className="form-control" id="selectPuntoVariacion" {...register("selectorPuntoVariacion", { required: false })} disabled={deshablitarSelectorVP}>
@@ -284,11 +300,11 @@ function BusquedaDatasheet({ setIdDatasheet }) {
                                 )
                                 )}
                             </select>
-                            <label for="selectPuntoVariacion">Seleccionar Punto de Variación: </label>
+                            <label htmlFor="selectPuntoVariacion">Seleccionar Punto de Variación: </label>
                         </div>
                         <label>Si no encuentra el punto de variación, escribalo a continuación: </label>
                         <div className='form-floating'>
-                            <input type="input2" className="form-control" id="inputPuntoVariacion" placeholder="puntoVariacion" {...register("inputPuntoVariacion", { required: false , maxLength: 30})} onChange={entradaPuntoVariacion} />
+                            <input type="input2" className="form-control" id="inputPuntoVariacion" placeholder="puntoVariacion" {...register("inputPuntoVariacion", { required: false })} onChange={entradaPuntoVariacion} />
                             <label htmlFor="inputPuntoVariacion">Ingresar Punto de Variación</label>
                         </div>
                         <div className="mt-2 d-flex justify-content-end">
@@ -297,7 +313,7 @@ function BusquedaDatasheet({ setIdDatasheet }) {
                     </form>
                     {/* */}
                 </div >
-                <div className='col'>
+                <div className='col right-column'>
                     {!loadingDatasheets && !errorDatasheets && dataDatasheets && dataDatasheets.getDatasheetsByDomain.map((datasheet) => (
                         <DatosDatasheet datasheet={datasheet} />
                     ))}

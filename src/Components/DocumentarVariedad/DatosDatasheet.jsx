@@ -20,7 +20,8 @@ const DatosDatasheet = ({ datasheet }) => {
             </div>
             {/* Acá voy a mostrar las variaciones de ese punto de variacion*/}
             {datasheet && datasheet.variations && datasheet.variations.map((variation, index) => (
-                <div className="rectangle ml-5 mt-1" key={index}>
+                <div className="rectangle ml-3 mt-1" key={index}>
+                    <strong>V</strong>
                     <span className="rectangle-text"> {variation.name} </span>
                 </div>
             ))}

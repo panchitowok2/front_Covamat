@@ -6,7 +6,7 @@ import { GET_DOMAINS, GET_VARIATIONPOINTS_BY_VARIETYTYPE_AND_DOMAIN, GET_VARIATI
 import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
 
-function SeleccionContexto() {
+function SeleccionContexto({agregarContexto}) {
 
     const [dominio, setDominio] = useState('0');
     const [variationPoint, setVariationPoint] = useState(null);
@@ -50,7 +50,7 @@ function SeleccionContexto() {
         //console.log('dataDatasheet ha cambiado', dataDatasheet);
         // Aquí puedes llamar a tu método
         if (!loadingDomains && !errorDomains && dataDomains && dataDomains.getDomains ) {
-            setDominio(dataDomains.getDomains[0].name)
+            //setDominio(dataDomains.getDomains[0].name)
         }
     });
 
@@ -59,6 +59,8 @@ function SeleccionContexto() {
         // Aquí puedes llamar a tu método
         if (!loadingVP && !errorVP && dataVP && dataVP.getVariationPointsByVarietyTypeAndDomain[0] ) {
             setVariationPoint(dataVP.getVariationPointsByVarietyTypeAndDomain[0].name)
+        }else{
+            setVariationPoint(null)
         }
     });
 
@@ -67,6 +69,8 @@ function SeleccionContexto() {
         // Aquí puedes llamar a tu método
         if (!loadingV && !errorV && dataVP && dataV.getVariationsByDomainVTVP) {
             setVariation(dataV.getVariationsByDomainVTVP[0].name)
+        }else{
+            setVariation(null)
         }
     });
 
@@ -88,7 +92,11 @@ function SeleccionContexto() {
     };
 
     const handleSubmit = async (event) => {
-        
+        // Luego de que el usuario hace click para agregar un contexto
+        // lo envio al componente padre para usarlo en el siguiente componente
+        // como filtro
+        event.preventDefault(); // evita que el submit refresque la pagina
+        agregarContexto(variation)
     }
     
     return (
@@ -136,7 +144,7 @@ function SeleccionContexto() {
 
                             </Form.Group>
                         
-                            <Button className='float-end mb-2' variant="primary" type="submit">
+                            <Button className='float-end mb-2' variant="primary" disabled={dominio === '0' || variation === null || variationPoint === null} type="submit">
                                 Agregar
                             </Button>
 

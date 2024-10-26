@@ -14,11 +14,22 @@ function DocumentarVariedad() {
     const [agregarVariaciones, setAgregarVariaciones] = useState(false);
     const [mostrarAgregarMasVariaciones, setMostrarAgregarMasVariaciones] = useState(false);
     const [finalizarTransaccion, setFinalizarTransaccion] = useState(false);
+    // Variables para los mensajes
     const [mostrarMensajeExito, setMostrarMensajeExito] = useState(false);
+    const [variant, setVariant] = useState(null)
+    const [msgAlertHeader, setMsgAlertHeader] = useState(null)
+    const [msgAlert, setMsgAlert] = useState(null)
     const navigate = useNavigate();
 
     const asignarId = (id) => {
         setIdDatasheet(id)
+    }
+
+    const showAlertMessage = (header, variant, message) => {
+        setVariant(variant)
+        setMsgAlertHeader(header)
+        setMsgAlert(message)
+        setMostrarMensajeExito(true)
     }
 
     if(mostrarAgregarMasVariaciones){
@@ -38,10 +49,17 @@ function DocumentarVariedad() {
             <h2>Documentar Variedad</h2>
             <p>Almacene variaciones en un datasheet segun su dominio, tipo de variación y punto de variación.
                 Si no encuentra algún datos, ingresarlo en el campo de texto correspondiente y se creara una nueva datasheet.</p>
-            {mostrarMensajeExito ? <Alert variant="success" onClose={() => setMostrarMensajeExito(false)} dismissible/> : <></>}
+            {/*mostrarMensajeExito ? <Alert variant="success" onClose={() => setMostrarMensajeExito(false)} dismissible/> : <></>*/}
+            <Alert show={mostrarMensajeExito} variant={variant} onClose={() => setMostrarMensajeExito(false)} dismissible>
+                <Alert.Heading>{msgAlertHeader}</Alert.Heading>
+                {msgAlert &&
+                    <div>
+                        {msgAlert}
+                    </div>}
+            </Alert>
             {!datasheet ?
                 <BusquedaDatasheet setIdDatasheet={asignarId} /> : <>
-                <AgregarVariaciones datasheet={datasheet} setMostrarAgregarMasVariaciones={setMostrarAgregarMasVariaciones} setShowConfirmar={setShowConfirmar} resetInputs={resetInputs} setResetInputs={setResetInputs} agregarVariaciones={agregarVariaciones} setFinalizarTransaccion={setFinalizarTransaccion} setAgregarVariaciones={setAgregarVariaciones}/>
+                <AgregarVariaciones datasheet={datasheet} setMostrarAgregarMasVariaciones={setMostrarAgregarMasVariaciones} setShowConfirmar={setShowConfirmar} resetInputs={resetInputs} setResetInputs={setResetInputs} agregarVariaciones={agregarVariaciones} setFinalizarTransaccion={setFinalizarTransaccion} setAgregarVariaciones={setAgregarVariaciones} showAlertMessage={showAlertMessage}/>
                 <ModalConfirmarAgregarVariacion showConfirmar={showConfirmar} setShowConfirmar={setShowConfirmar} setAgregarVariaciones={setAgregarVariaciones} setFinalizarTransaccion={setFinalizarTransaccion}/>
                 <AgregarOtraVariacion show={show} setShow={setShow} setResetInputs={setResetInputs} setFinalizarTransaccion={setFinalizarTransaccion}/>
                 </>}
