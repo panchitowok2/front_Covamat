@@ -130,3 +130,14 @@ mutation Mutation($idCase: ID, $variations: [ID]) {
   addDatasheetInstancesToCase(idCase: $idCase, variations: $variations)
 }
 `;
+
+export const GET_IS_DATASHEET_INSTANCE_DATA_IN_CASE = gql`
+query Query($idDatasheetInstanceArray: [ID], $inputDatasheetInstance: InputDatasheetInstance) {
+  getIsDatasheetInstanceDataInCase(idDatasheetInstanceArray: $idDatasheetInstanceArray, inputDatasheetInstance: $inputDatasheetInstance)
+}
+`;
+export const ADD_VARIATIONS_TO_INSTANCE = gql`
+mutation Mutation($datasheetInstanceId: ID, $variations: [InputVariation]) {
+  addVariationsToInstance(datasheetInstanceId: $datasheetInstanceId, variations: $variations)
+}
+`;

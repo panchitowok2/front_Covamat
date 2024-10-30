@@ -5,11 +5,14 @@ import Table from 'react-bootstrap/Table';
 import { useState, useEffect, useRef } from 'react';
 import { set, useForm } from 'react-hook-form';
 import {
-    GET_IS_DATASHEET_INSTANCE_IN_CASE, GET_VARIETYTYPES_BY_DOMAIN,
+    GET_IS_DATASHEET_INSTANCE_IN_CASE,
+    GET_VARIETYTYPES_BY_DOMAIN,
+    GET_IS_DATASHEET_INSTANCE_DATA_IN_CASE,
     GET_VARIATIONPOINTS_BY_VARIETYTYPE_AND_DOMAIN,
     GET_VARIATIONS_BY_DOMAIN_VARIETYTYPE_VARIATIONPOINT,
     CREATE_DATASHEET_INSTANCE,
-    GET_DATASHEETS_BY_DOMAIN_VARIETYTYPE_VARIATIONPOINT
+    GET_DATASHEETS_BY_DOMAIN_VARIETYTYPE_VARIATIONPOINT,
+    ADD_VARIATIONS_TO_INSTANCE
 } from '../../Querys/Querys';
 import { useLazyQuery, useQuery, useMutation } from '@apollo/client';
 import Alert from 'react-bootstrap/Alert';
@@ -54,6 +57,13 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
     const [isDatasheetInstanceInCase, { loading: loadingDInCase, error: errorDInCase, data: dataDInCase }] = useLazyQuery(GET_IS_DATASHEET_INSTANCE_IN_CASE, {
         fetchPolicy: "network-only"
     });
+
+    const [isDatasheetInstanceDataInCase, { loading: loadingDDataInCase, error: errorDDataInCase, data: dataDDataInCase }] = useLazyQuery(GET_IS_DATASHEET_INSTANCE_DATA_IN_CASE, {
+        fetchPolicy: "network-only"
+    });
+
+    const [addVariationsToInstance, { loading: loadingAddVariationsToInstance, error: errorAddVariationsToInstance, data: dataAddVariationsToInstance }] = useMutation(ADD_VARIATIONS_TO_INSTANCE);
+
 
     // Evento para mostrar mensajes
     const showAlertMessage = (header, variant, message) => {
@@ -112,29 +122,77 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
     });
     useDataChangeEffect(dataCreateDatasheet, () => {
         //console.log('dataCreateDatasheet ha cambiado', dataCreateDatasheet);
-        // Aquí puedes llamar a tu método
+        // Tengo que validar que si el id que devuelve este metodo ya estaba en el arreglo
+        // significa que agrego la variacion a un datasheet instance que ya existia
         if (!loadingCreateDatasheet && !errorCreateDatasheet && dataCreateDatasheet && dataCreateDatasheet.createDatasheetInstance) {
             //console.log("agrego al id del datasheet instance al arreglo del caso: ", dataCreateDatasheet.createDatasheetInstance)
-            if (!idArr) {
-                setIdArr(dataCreateDatasheet.createDatasheetInstance)
-            } else {
+            if(idArr.length === 0){
+                setIdArr([dataCreateDatasheet.createDatasheetInstance])
+            }else{
                 idArr.push(dataCreateDatasheet.createDatasheetInstance)
-                //console.log("Agrego al array el nuevo id de datasheet", idArr)
             }
             showAlertMessage('Exito', 'success', 'Datasheet Instance añadida al caso')
-            //console.log('el arreglo donde voy guardando los datasheet instance: ', variable)
+            console.log('Agrego al arreglo el id: ', dataCreateDatasheet.createDatasheetInstance)
         }
     });
 
     useDataChangeEffect(dataDInCase, () => {
-        console.log('dataDInCase ha cambiado', dataDInCase);
+        console.log('dataDInCase ha cambiado', dataDInCase,loadingDInCase, errorDInCase);
         // Aquí puedes llamar a tu método
         if (!loadingDInCase && !errorDInCase && dataDInCase) {
             console.log("cambio el valor de DInCase: ", dataDInCase.getIsDatasheetInstanceInCase)
-            if (dataDInCase.getIsDatasheetInstanceInCase) {
-                console.log('La variacion ya esta en el caso', dataDInCase.getIsDatasheetInstanceInCase, ' ', idArr)
+            if (!loadingDInCase && !errorDInCase && dataDInCase.getIsDatasheetInstanceInCase ) {
+                //console.log('La variacion ya esta en el caso', dataDInCase.getIsDatasheetInstanceInCase, ' ', idArr)
                 showAlertMessage('Error', 'danger', 'La Datasheet Instance ingresada ya existe en el caso')
             } else {
+                // la variacion no esta en el caso, debo verificar si la datasheet instance
+                // esta en el caso o no
+                console.log('Llamo a is dataseet instance data in case')
+                
+                isDatasheetInstanceDataInCase({
+                    variables: {
+                        idDatasheetInstanceArray: idArr,
+                        inputDatasheetInstance: {
+                            domain: { name: dominio },
+                            varietyType: { name: varietyType },
+                            variationPoint: { name: variationPoint },
+                            name: null,
+                            id_datasheet: dataId.getDatasheetByDomainVTVP[0]._id,
+                            variations: variationArr
+                        }
+                    }
+                });
+                
+            }
+        }
+    });
+
+    // Esta validacion sirve para saber si los datos del datasheet que el usuario desea 
+    // agregar una variacion no estaba previamente en el caso
+    useDataChangeEffect(dataDDataInCase, () => {
+        console.log('dataDDataInCase ha cambiado', dataDDataInCase);
+        
+        // Aquí puedes llamar a tu método
+        if (!loadingDDataInCase && !errorDDataInCase && dataDDataInCase) {
+            console.log("cambio el valor de DDataInCase: ", dataDDataInCase.getIsDatasheetInstanceDataInCase)
+            if (!loadingDDataInCase && !errorDDataInCase && dataDDataInCase.getIsDatasheetInstanceDataInCase && !dataDInCase.getIsDatasheetInstanceInCase
+                && !loadingDInCase && !errorDInCase ) {    
+                console.log('La datasheet instance ya esta en el caso', dataDDataInCase.getIsDatasheetInstanceDataInCase)
+                // si los datos del datasheet estan en el caso se debe agregar la variacion 
+                // a esa datasheet usando addVariationsToInstance
+                addVariationsToInstance({
+                    variables: {
+                        datasheetInstanceId: dataDDataInCase.getIsDatasheetInstanceDataInCase,
+                        variations: [
+                          {
+                            name: variation,
+                            variables: null
+                          }
+                        ]
+                      }
+                })
+            } else {
+                // si los datos de la datasheet no estan en el caso debo crear la datasheet
                 console.log('Llamo a create datasheet instance')
                 auxVar = { name: variation, variables: null } // aca van tambien las variables
                 variationArr = [auxVar];
@@ -151,6 +209,24 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
                         }
                     }
                 });
+            }
+        }
+        
+    });
+
+
+    // Verifico si la variacion se pudo agregar exitosamente
+    useDataChangeEffect(dataAddVariationsToInstance, () => {
+        console.log('dataAddVariationsToInstance ha cambiado', dataAddVariationsToInstance);
+        // Aquí puedes llamar a tu método
+        if (!loadingAddVariationsToInstance && !errorAddVariationsToInstance && dataAddVariationsToInstance) {
+            console.log("cambio el valor de dataAddVariationsToInstance: ", dataAddVariationsToInstance)
+            if (dataAddVariationsToInstance.addVariationsToInstance) {
+                console.log('Se agrego la variacion a la datasheet instance')
+                showAlertMessage('Exito', 'success', 'La variación fue añadida a la datasheet instance')
+            } else {
+                // error al agregar la variacion a la datasheet instance
+                showAlertMessage('Error', 'danger', 'La variación no pudo ser añadida a la datasheet instance')
             }
         }
     });
@@ -180,7 +256,7 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
         //console.log('actualizo campo input var: ', event.target.value)
     };
 
-    const handleSubmit = async (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault(); // evita que el submit refresque la pagina
         auxVar = { name: variation, variables: null } // aca van tambien las variables
         variationArr = [auxVar];
@@ -198,8 +274,8 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar }) {
                 id_datasheet: null, //no lo uso en la verificacion
                 variations: variationArr
             }
-            //console.log('antes de la llamada a DInCaseCall', idCase, datash )
-            await isDatasheetInstanceInCase({
+            console.log('antes de la llamada a DInCaseCall', idArr, datash )
+            isDatasheetInstanceInCase({
                 variables: {
                     idDatasheetInstanceArray: idArr,
                     inputDatasheetInstance: datash
