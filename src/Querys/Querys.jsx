@@ -141,3 +141,71 @@ mutation Mutation($datasheetInstanceId: ID, $variations: [InputVariation]) {
   addVariationsToInstance(datasheetInstanceId: $datasheetInstanceId, variations: $variations)
 }
 `;
+export const GET_DATASHEET_INSTANCES_BY_CASE = gql`
+query Query($idCase: ID) {
+  getDatasheetsInstancesByCase(idCase: $idCase) {
+    _id
+    domain {
+      name
+    }
+    name
+    variationPoint {
+      name
+    }
+    id_datasheet
+    variations {
+      name
+      variables {
+        var
+        valueArray {
+          var
+          value
+        }
+      }
+    }
+    varietyType {
+      name
+    }
+  }
+}`;
+
+export const GET_CASES_SIMILAR_TO_REUSE_CASE = gql`
+query Query($reuseCase: ReuseCase) {
+  getCasesSimilarToReuseCase(reuseCase: $reuseCase) {
+    _id
+    description
+    domain {
+      name
+    }
+    name
+    variety
+  }
+}`;
+
+export const GET_DATASHEET_INSTANCES_BY_ID = gql`
+query Query($ids: [ID]) {
+  getDatasheetInstancesById(ids: $ids) {
+    id_datasheet
+    name
+    variationPoint {
+      name
+    }
+    domain {
+      name
+    }
+    varietyType {
+      name
+    }
+    variations {
+      name
+    }
+    _id
+  }
+}`;
+
+
+export const ADD_VARIATION_TO_CASE = gql`
+mutation Mutation($idCase: ID, $datasheetInstance: InputDatasheetInstance) {
+  addVariationToCase(idCase: $idCase, datasheetInstance: $datasheetInstance)
+}
+`;

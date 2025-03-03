@@ -55,28 +55,28 @@ function BusquedaDatasheet({ setIdDatasheet }) {
 
     const onSubmit = async (data) => {
         //evt.preventDefault();
-        /*
-        if(data.InputDominio.value != ""){
-            //
-        }else{
-            //El usuario ingreso un dominio por texto, debo crear datasheet
-        }
-        */
-        console.log(data)
-        await obtenerDatasheet({
-            variables: {
-                domain: {
-                    name: valueSelectorDominio
-                },
-                varietyType: {
-                    name: seleccionTipoVariacion
-                },
-                variationPoint: {
-                    name: puntoDeVariacionSelector
-                }
 
-            }
-        })
+        console.log(data)
+
+        if (valueSelectorDominio === '0' && dominioEscrito === '' || puntoDeVariacionSelector === '0' && puntoDeVariacion === '' || seleccionTipoVariacion === '0') {
+            console.log('no ingreso dominio o punto de variacion')
+        } else {
+            await obtenerDatasheet({
+                variables: {
+                    domain: {
+                        name: valueSelectorDominio
+                    },
+                    varietyType: {
+                        name: seleccionTipoVariacion
+                    },
+                    variationPoint: {
+                        name: puntoDeVariacionSelector
+                    }
+
+                }
+            })
+        }
+
         //console.log('Los datos del form son: ', evt.target.SelectorDominio.options[evt.target.SelectorDominio.selectedIndex].innerText)
     };
 
@@ -109,7 +109,7 @@ function BusquedaDatasheet({ setIdDatasheet }) {
 
         console.log('antes de entrar a createDatasheet', dom, vp)
         // llamo al metodo
-        if(seleccionTipoVariacion === null){
+        if (seleccionTipoVariacion === null) {
             setValue("inputName", "")
         }
         createDatasheet({
@@ -283,7 +283,7 @@ function BusquedaDatasheet({ setIdDatasheet }) {
                             <label htmlFor="inputDominio">Ingresar Dominio</label>
                         </div>
                         <div className='form-floating mt-2'>
-                            <select className="form-control" id="selectTipoVariedad" {...register("selectorTipoVariedad", { required: false })} onChange={buscarPuntosDeVariacion}>
+                            <select className="form-control" id="selectTipoVariedad" {...register("selectorTipoVariedad", { required: true })} onChange={buscarPuntosDeVariacion}>
                                 <option value='0'>Seleccionar Tipo de Variedad</option>
                                 <option value='fuente'>Fuente</option>
                                 <option value='procesamiento'>Procesamiento</option>

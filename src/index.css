@@ -83,5 +83,11 @@ code {
   height: 100vh;
 }
 
+.navbar-logo {
+  width: 50px; /* Ajusta el tamaño según tus necesidades */
+  height: auto; /* Mantiene la proporción del logo */
+}
+
+
 
 @import 'bootstrap/dist/css/bootstrap.min.css';

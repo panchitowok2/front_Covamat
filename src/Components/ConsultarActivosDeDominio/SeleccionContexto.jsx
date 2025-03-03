@@ -5,8 +5,9 @@ import { FloatingLabel } from 'react-bootstrap';
 import { GET_DOMAINS, GET_VARIATIONPOINTS_BY_VARIETYTYPE_AND_DOMAIN, GET_VARIATIONS_BY_DOMAIN_VARIETYTYPE_VARIATIONPOINT } from '../../Querys/Querys.jsx'
 import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
 import { useForm } from 'react-hook-form';
+import VariedadesSeleccionadas from './VariedadesSeleccionadas.jsx';
 
-function SeleccionContexto({agregarContexto}) {
+function SeleccionContexto({ contexto, agregarContexto, mostrarActivos }) {
 
     const [dominio, setDominio] = useState('0');
     const [variationPoint, setVariationPoint] = useState(null);
@@ -15,7 +16,7 @@ function SeleccionContexto({agregarContexto}) {
     const [variant, setVariant] = useState(null)
     const [msgAlertHeader, setMsgAlertHeader] = useState(null)
     const [msgAlert, setMsgAlert] = useState(null)
-    
+
     const { loading: loadingDomains, error: errorDomains, data: dataDomains, refetch } = useQuery(GET_DOMAINS, {
         fetchPolicy: "network-only"
     });
@@ -49,7 +50,7 @@ function SeleccionContexto({agregarContexto}) {
     useDataChangeEffect(dataDomains, () => {
         //console.log('dataDatasheet ha cambiado', dataDatasheet);
         // Aquí puedes llamar a tu método
-        if (!loadingDomains && !errorDomains && dataDomains && dataDomains.getDomains ) {
+        if (!loadingDomains && !errorDomains && dataDomains && dataDomains.getDomains) {
             //setDominio(dataDomains.getDomains[0].name)
         }
     });
@@ -57,9 +58,9 @@ function SeleccionContexto({agregarContexto}) {
     useDataChangeEffect(dataVP, () => {
         //console.log('dataDatasheet ha cambiado', dataDatasheet);
         // Aquí puedes llamar a tu método
-        if (!loadingVP && !errorVP && dataVP && dataVP.getVariationPointsByVarietyTypeAndDomain[0] ) {
+        if (!loadingVP && !errorVP && dataVP && dataVP.getVariationPointsByVarietyTypeAndDomain[0]) {
             setVariationPoint(dataVP.getVariationPointsByVarietyTypeAndDomain[0].name)
-        }else{
+        } else {
             setVariationPoint(null)
         }
     });
@@ -69,13 +70,13 @@ function SeleccionContexto({agregarContexto}) {
         // Aquí puedes llamar a tu método
         if (!loadingV && !errorV && dataVP && dataV.getVariationsByDomainVTVP) {
             setVariation(dataV.getVariationsByDomainVTVP[0].name)
-        }else{
+        } else {
             setVariation(null)
         }
     });
 
     useEffect(() => {
-        
+
     }, []);
 
     const handleSelectorDominio = (event) => {
@@ -96,9 +97,22 @@ function SeleccionContexto({agregarContexto}) {
         // lo envio al componente padre para usarlo en el siguiente componente
         // como filtro
         event.preventDefault(); // evita que el submit refresque la pagina
-        agregarContexto(variation)
+        // estos datos son lo que mando al componente padre para que realice la busqueda
+        const nuevosValores = {
+            domainName: dominio,
+            variationPointName: variationPoint,
+            variationName: variation
+        };
+        agregarContexto(nuevosValores);
+
     }
-    
+
+    const handleSubmitContext = async (event) => {
+        event.preventDefault(); // evita que el submit refresque la pagina
+        console.log('handleSubmit de enviar contexto')
+        //llamar al componente que muestra los casos
+        mostrarActivos()
+    }
     return (
         <>
             <div className='row align-items-start'>
@@ -143,7 +157,7 @@ function SeleccionContexto({agregarContexto}) {
                                 </FloatingLabel>
 
                             </Form.Group>
-                        
+
                             <Button className='float-end mb-2' variant="primary" disabled={dominio === '0' || variation === null || variationPoint === null} type="submit">
                                 Agregar
                             </Button>
@@ -152,9 +166,17 @@ function SeleccionContexto({agregarContexto}) {
                     </Form>
                 </div>
                 <div className='card col-md-4 ml-3 p-0'>
-                    <Form>
+                    <Form onSubmit={handleSubmitContext}>
                         <h5 className='fw-bold card-header w-100'>Contexto:</h5>
-                        
+                        <Form.Group className="mb-2 card-body position-relative" controlId="datosContexto">
+                            {/* <VariedadesSeleccionadas variedad={contexto} />*/}
+                            <Button className='float-end mb-2'
+                                variant="primary"
+                                type="submit"
+                                disabled={false} >
+                                Consultar
+                            </Button>
+                        </Form.Group>
                     </Form>
                 </div>
             </div>

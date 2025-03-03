@@ -37,12 +37,11 @@ function AgregarVariaciones({ datasheet, setMostrarAgregarMasVariaciones, setSho
         }
     }
 
-    // Luego puedes usar este hook en tu componente de la siguiente manera:
-
+    // Variable que cambia cuando el servidor devuelve la request
+    // de agregar variaciones a datasheet
     useDataChangeEffect(dataAddVariations, () => {
         console.log('dataAddVariations ha cambiado', dataAddVariations);
-        // Aquí puedes llamar a tu método
-        if (dataAddVariations) {
+        if (dataAddVariations && dataAddVariations.addVariations) {
             console.log('Las variaciones se agregar exitosamente!')
 
             if (variations.length === 5) {
@@ -75,6 +74,8 @@ function AgregarVariaciones({ datasheet, setMostrarAgregarMasVariaciones, setSho
         }
     });
 
+    // Cuando el usuario presiona Si en el modal esto cambia, se pone en true
+    // y llama a la mutacion que agrega variaciones al datasheet
     useDataChangeEffect(agregarVariaciones, () => {
         console.log('agregarVariaciones ha cambiado', agregarVariaciones);
         // Aquí puedes llamar a tu método
@@ -107,23 +108,23 @@ function AgregarVariaciones({ datasheet, setMostrarAgregarMasVariaciones, setSho
                         <label>Ingresar variaciones:</label>
                         <div className="form-floating">
                             <input type="variacion1" className="form-control" {...register("inputVariacion1", { required: true, maxLength: 50 })} id="floatingInput" placeholder="variacion1" />
-                            <label for="floatingInput">Variación</label>
+                            <label htmlFor="floatingInput">Variación</label>
                         </div>
                         <div className="form-floating mt-2">
                             <input type="variacion1" className="form-control" {...register("inputVariacion2", { required: false, maxLength: 50 })} id="floatingInput" placeholder="variacion2" />
-                            <label for="floatingInput">Variación</label>
+                            <label htmlFor="floatingInput">Variación</label>
                         </div>
                         <div className="form-floating mt-2">
                             <input type="variacion1" className="form-control" {...register("inputVariacion3", { required: false, maxLength: 50 })} id="floatingInput" placeholder="variacion3" />
-                            <label for="floatingInput">Variación</label>
+                            <label Htmlfor="floatingInput">Variación</label>
                         </div>
                         <div className="form-floating mt-2">
                             <input type="variacion1" className="form-control" {...register("inputVariacion4", { required: false, maxLength: 50 })} id="floatingInput" placeholder="variacion4" />
-                            <label for="floatingInput">Variación</label>
+                            <label htmlFor="floatingInput">Variación</label>
                         </div>
                         <div className="form-floating mt-2">
                             <input type="variacion1" className="form-control" {...register("inputVariacion5", { required: false, maxLength: 50 })} id="floatingInput" placeholder="variacion5" />
-                            <label for="floatingInput">Variación</label>
+                            <label htmlFor="floatingInput">Variación</label>
                         </div>
                         <div className="mt-2 d-flex justify-content-end">
                             <button type="button submit" className="btn btn-success" >Aceptar</button>

@@ -4,6 +4,7 @@ import { FloatingLabel } from 'react-bootstrap';
 import { useQuery } from '@apollo/client';
 import { GET_DOMAINS } from '../../Querys/Querys';
 import { useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 
 function DatosCaso({ actualizarCasoIngresado }) {
     const { loading: loadingDomains, error: errorDomains, data: dataDomains, refetch } = useQuery(GET_DOMAINS, {
@@ -34,6 +35,7 @@ function DatosCaso({ actualizarCasoIngresado }) {
         }
 
     }
+
     return (
         <>
             <div className='row align-items-start'>
@@ -74,8 +76,8 @@ function DatosCaso({ actualizarCasoIngresado }) {
                                         placeholder="Ingresar descripción"
                                         value={descripcion}
                                         onChange={handleDescripcion}
-                                        required 
-                                        style={{ height: '20vh' }}/>
+                                        required
+                                        style={{ height: '20vh' }} />
                                 </FloatingLabel>
                             </Form.Group>
                             <Button className='float-end mb-2' variant="primary" type="submit" disabled={dominio === '0' || nombreCaso === ''}>

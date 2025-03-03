@@ -5,6 +5,7 @@ import { Link, BrowserRouter, Route, Routes } from 'react-router-dom';
 import Footer from './Footer/footer.jsx';
 import DocumentarCaso from './DocumentarCaso/DocumentarCaso.jsx'
 import ConsultarActivosDeDominio from './ConsultarActivosDeDominio/ConsultarActivosDeDominio.jsx'
+import logo from '../logo COVAMATSinFondo.png'; // Asegúrate de ajustar la ruta al logo
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000',
@@ -17,6 +18,9 @@ export default function App() {
       <BrowserRouter>
         <nav className="navbar custom-navbar">
           <div className="container">
+            <Link to="/">
+              <img src={logo} alt="Logo" className="navbar-logo img-fluid" />
+            </Link>
             <div className="navbar-nav ml-auto flex-row">
               <Link to="/" className="nav-link mr-2 text-white">Inicio</Link>
               <Link to="/documentarvariedad" className="nav-link mr-2 text-white">Documentar Variedad</Link>
@@ -33,7 +37,7 @@ export default function App() {
             <Route path="/ConsultarActivosDeDominio" element={<ConsultarActivosDeDominio />} />
           </Routes>
         </div>
-          <Footer />
+        <Footer />
       </BrowserRouter>
     </ApolloProvider>
   );

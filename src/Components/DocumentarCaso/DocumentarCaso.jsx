@@ -21,7 +21,6 @@ function DocumentarCaso() {
     const [msgAlert, setMsgAlert] = useState(null)
     // Variables de las llamadas al back
     const [createCase, { loading: loadingCreateCase, error: errorCreateCase, data: dataCreateCase }] = useMutation(CREATE_CASE);
-    const [addVariations, { loading: loadingAddVariations, error: errorAddVariations, data: dataAddVariations }] = useMutation(ADD_VARIATIONS_TO_CASE);
     const navigate = useNavigate();
 
     const reiniciarVariables = () => {
@@ -59,27 +58,6 @@ function DocumentarCaso() {
         }
     });
 
-    useDataChangeEffect(dataAddVariations, () => {
-        console.log('dataAddVariations ha cambiado', dataAddVariations);
-        // Si devuelve true y se añadieron las variaciones, termino el proceso de crear caso
-        if (!loadingAddVariations && !errorAddVariations && dataAddVariations.addVariations) {
-            console.log('cambio el valor de add variations ', dataAddVariations.addVariations)
-            setShowConfirmar(false)
-            //navigate('/DocumentarCaso')
-        }
-    });
-
-    useEffect(() => {
-        // si agrego las variaciones, vuelvo a llamar al componente
-        if (dataAddVariations && dataAddVariations.addDatasheetInstancesToCase) {
-            //console.log('Valor dataId', dataId.getDatasheetByDomainVTVP[0]._id, ' valor de variation', variation)
-            reiniciarVariables()
-            navigate('/DocumentarCaso')
-            showAlertMessage('Éxito', 'success', 'El caso fue creado correctamente')
-        }
-
-    }, [dataAddVariations]);
-
     const actualizarCasoIngresado = async (nombreCaso, dominio, descripcion) => {
         //console.log('se llamo al metodo actualizar caso ingresado')
         //setDatosCasoIngresados(true);
@@ -99,26 +77,10 @@ function DocumentarCaso() {
         })
     }
 
-    const actualizarVariations = () => {
-        // Agrego las instancias de datasheet al caso
-        console.log('Actualizo las variations del caso: ', arrayVariations)
-        if (arrayVariations.length > 0) {
-            addVariations({
-                variables: {
-                    idCase: idCaso,
-                    variations: arrayVariations
-                }
-            });
-        }
-    }
-
-    const mostrarConfirmar = (arr) => {
+    const mostrarConfirmar = (val) => {
         // muestro el modal de confirmacion
         console.log('entro a mostrarConfirmar')
-        if (arr.length > 0) {
-            setArrayVariations(arr)
-            setShowConfirmar(true)
-        }
+        setShowConfirmar(val)
     }
 
     return (
@@ -136,8 +98,8 @@ function DocumentarCaso() {
                 <DatosCaso actualizarCasoIngresado={actualizarCasoIngresado} />
                 :
                 <>
-                    <DatosDatasheetInstance dominio={dominio} nombreCaso={nombreCaso} mostrarConfirmar={mostrarConfirmar} />
-                    <ModalConfirmarAlmacenarCaso showConfirmar={showConfirmar} setShowConfirmar={setShowConfirmar} actualizarVariations={actualizarVariations} />
+                    <DatosDatasheetInstance dominio={dominio} nombreCaso={nombreCaso} mostrarConfirmar={mostrarConfirmar} idCaso={idCaso} />
+                    <ModalConfirmarAlmacenarCaso showConfirmar={showConfirmar} setShowConfirmar={setShowConfirmar} />
                 </>
             }
         </>
