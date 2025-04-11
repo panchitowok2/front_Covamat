@@ -3,20 +3,31 @@ import React from "react";
 const VariedadesSeleccionadas = ({ variedad }) => {
 
     return (
-        variedad &&
+        variedad && variedad.reuseCase &&
+        variedad.reuseCase.domain.name !== '' &&
         <>
             {/* Acá voy a mostrar las variaciones de ese punto de variacion*/}
-            {variedad && variedad.map((variety, index) => (
-                <div className="rectangle ml-3 mt-1 mb-1" key={index}>
-                    <strong>V</strong>
-                    <span className="rectangle-text"> {variety} </span><br />
+            <strong>Dominio:</strong> <span>{variedad.reuseCase.domain.name}</span><br />
+            {variedad.reuseCase.context.map((element, index) => (
+            <div key={index}>
+                <div className="triangle-container">
+                    <div className="triangle"></div>
+                    <span className="triangle-text">
+                        <strong>VP:</strong>
+                        <br />
+                        {element.variationPoint.name}
+                    </span>
                 </div>
-            ))}
 
+                {element.variations && element.variations.map((variet, varIndex) => (
+                    <div key={varIndex} className="rectangle d-flex justify-content-between align-items-center mt-2 ml-2">
+                        <span><strong>Variación:</strong> {variet.name}</span><br />
+                    </div>
+                ))}
+            </div>
+        ))}
         </>
-
     )
-
 };
 
 export default VariedadesSeleccionadas;

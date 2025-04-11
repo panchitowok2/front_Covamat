@@ -169,8 +169,8 @@ function SeleccionContexto({ contexto, agregarContexto, mostrarActivos }) {
                     <Form onSubmit={handleSubmitContext}>
                         <h5 className='fw-bold card-header w-100'>Contexto:</h5>
                         <Form.Group className="mb-2 card-body position-relative" controlId="datosContexto">
-                            {/* <VariedadesSeleccionadas variedad={contexto} />*/}
-                            <Button className='float-end mb-2'
+                            <VariedadesSeleccionadas variedad={contexto} />
+                            <Button className='float-end mb-2 mt-2'
                                 variant="primary"
                                 type="submit"
                                 disabled={false} >

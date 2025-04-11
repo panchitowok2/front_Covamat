@@ -209,3 +209,9 @@ mutation Mutation($idCase: ID, $datasheetInstance: InputDatasheetInstance) {
   addVariationToCase(idCase: $idCase, datasheetInstance: $datasheetInstance)
 }
 `;
+
+export const CREATE_REUSE_CASE = gql`
+mutation Mutation($inputCase: InputCase, $inputDatasheetInstance: [InputDatasheetInstance]) {
+  createReuseCase(inputCase: $inputCase, inputDatasheetInstance: $inputDatasheetInstance)
+}
+`;

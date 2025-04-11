@@ -1,11 +1,19 @@
 import SeleccionContexto from './SeleccionContexto';
 import { useState, useEffect, useRef } from 'react';
 import ActivosDeDominio from './ActivosDeDominio';
-//import Alert from 'react-bootstrap/Alert';
+import Alert from 'react-bootstrap/Alert';
 
 function ConsultarActivosDeDominio() {
 
     const [domain, setDomain] = useState('');
+
+    // Variables para los mensajes
+    const [showAlert, setShowAlert] = useState(false);
+    const [variant, setVariant] = useState(null)
+    const [msgAlertHeader, setMsgAlertHeader] = useState(null)
+    const [msgAlert, setMsgAlert] = useState(null)
+
+    // Variable utilizada para filtrar casos segun su contexto
     const [contexto, setContexto] = useState({
         reuseCase: {
             domain: {
@@ -26,6 +34,7 @@ function ConsultarActivosDeDominio() {
         }
     });
     const [eligioContexto, setEligioContexto] = useState(false);
+
     useEffect(() => {
         if (contexto) {
             console.log("Contexto actualizado: " + JSON.stringify(contexto));
@@ -50,42 +59,41 @@ function ConsultarActivosDeDominio() {
                                 },
                                 variations: [
                                     {
-                                        name: con.variationName
+                                        name: con.variationName // Aquí está correcto
                                     }
                                 ]
                             }
                         ]
                     }
                 });
-
-                //console.log("If si dominio esta vacio: " + JSON.stringify(contexto))
             } else {
                 setContexto(prevContexto => {
                     let updatedContext = [...prevContexto.reuseCase.context];
                     let existingVariationPoint = updatedContext.find(
                         item => item.variationPoint.name === con.variationPointName
                     );
-
+    
                     if (existingVariationPoint) {
-                        // Verifica si la variación ya existe
+                        // Verifica si la variación ya existe - CORREGIDO: usar variationName
                         let existingVariation = existingVariationPoint.variations.find(
-                            variation => variation.name === con.variationNames
+                            variation => variation.name === con.variationName // Aquí estaba el error
                         );
-
+    
                         if (!existingVariation) {
                             // Agregar nueva variación al punto de variación existente
-                            existingVariationPoint.variations.push({ name: con.variationNames });
+                            existingVariationPoint.variations.push({ name: con.variationName }); // Y aquí
                         } else {
                             console.log("La variación ya existe en el punto de variación.");
+                            return prevContexto; // Retornar el estado anterior si ya existe
                         }
                     } else {
                         // Agregar nuevo punto de variación junto con la variación
                         updatedContext.push({
                             variationPoint: { name: con.variationPointName },
-                            variations: [{ name: con.variationNames }]
+                            variations: [{ name: con.variationName }] // Y aquí
                         });
                     }
-
+    
                     return {
                         ...prevContexto,
                         reuseCase: {
@@ -95,11 +103,9 @@ function ConsultarActivosDeDominio() {
                         }
                     };
                 });
-                //console.log("If si ya habia un dominio: " + JSON.stringify(contexto))
             }
-            //console.log("REuse case: " + JSON.stringify(contexto))
-        }else{
-            //console.log("alguna entrada vino vacia" )
+        } else {
+            console.log("alguna entrada vino vacia")
         }
     };
 
@@ -107,13 +113,27 @@ function ConsultarActivosDeDominio() {
         setEligioContexto(true)
     }
 
+    const showAlertMessage = (header, variant, message) => {
+        setVariant(variant)
+        setMsgAlertHeader(header)
+        setMsgAlert(message)
+        setShowAlert(true)
+    }
+
     return (
         <>
             <h2>Consultar Activos de Dominio</h2>
             <p>Busqueda de casos que compartan contextos similares</p>
+            <Alert show={showAlert} variant={variant} onClose={() => setShowAlert(false)} dismissible>
+                <Alert.Heading>{msgAlertHeader}</Alert.Heading>
+                {msgAlert &&
+                    <div>
+                        {msgAlert}
+                    </div>}
+            </Alert>
             {!eligioContexto
                 ? <SeleccionContexto contexto={contexto} agregarContexto={agregarContexto} mostrarActivos={mostrarActivos} />
-                : <ActivosDeDominio contexto={contexto} dominio={domain} />
+                : <ActivosDeDominio contexto={contexto} dominio={domain} showAlertMessage={showAlertMessage}/>
             }
         </>
 
