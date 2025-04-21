@@ -344,12 +344,12 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar, idCaso 
                                             ))}
                                         </tbody>
                                     </Table>
-                                    <Button className='btn btn-primary' onClick={addRow}> Agregar Fila </Button>
+                                    <Button className='btn btn-primary' variant="success" onClick={addRow}> Agregar Fila </Button>
 
                                 </>
                                 : <></>}
 
-                            <Button className='float-end mb-2' variant="primary" type="submit" disabled={loadingVT || loadingVP || loadingV}>
+                            <Button className='float-end mb-2' variant="success" type="submit" disabled={loadingVT || loadingVP || loadingV}>
                                 Agregar
                             </Button>
 

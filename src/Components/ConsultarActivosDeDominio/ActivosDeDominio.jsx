@@ -195,7 +195,7 @@ const ActivosDeDominio = ({ contexto, dominio, showAlertMessage }) => {
                                     </FloatingLabel>
                                 </Form.Group>
                                 <Button className='float-end mb-2 mt-2'
-                                    variant="primary"
+                                    variant="success"
                                     type="submit"
                                     disabled={nombreCaso === '' || descripcion === '' || datasheetInstances.length === 0} >
                                     Crear Caso Reuso
@@ -248,10 +248,8 @@ const ActivosDeDominio = ({ contexto, dominio, showAlertMessage }) => {
                 </div>
             </> :
             <>
-                {/* Acá voy a mostrar los casos que instancian esos contextos*/}
-                <h2>No encontro casos de reuso</h2>
-                {/*JSON.stringify(contexto)*/}
-                {/*dominio*/}
+                {/* Hubo un error al buscar los casos para los parametros seleccionados*/}
+                <h2>No se encontraron casos de reuso</h2>
             </>
 
     )

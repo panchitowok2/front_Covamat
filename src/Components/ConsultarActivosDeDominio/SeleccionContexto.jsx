@@ -158,7 +158,7 @@ function SeleccionContexto({ contexto, agregarContexto, mostrarActivos }) {
 
                             </Form.Group>
 
-                            <Button className='float-end mb-2' variant="primary" disabled={dominio === '0' || variation === null || variationPoint === null} type="submit">
+                            <Button className='float-end mb-2' variant="success" disabled={dominio === '0' || variation === null || variationPoint === null} type="submit">
                                 Agregar
                             </Button>
 
@@ -171,7 +171,7 @@ function SeleccionContexto({ contexto, agregarContexto, mostrarActivos }) {
                         <Form.Group className="mb-2 card-body position-relative" controlId="datosContexto">
                             <VariedadesSeleccionadas variedad={contexto} />
                             <Button className='float-end mb-2 mt-2'
-                                variant="primary"
+                                variant="success"
                                 type="submit"
                                 disabled={false} >
                                 Consultar

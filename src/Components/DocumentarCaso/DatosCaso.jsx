@@ -80,7 +80,7 @@ function DatosCaso({ actualizarCasoIngresado }) {
                                         style={{ height: '20vh' }} />
                                 </FloatingLabel>
                             </Form.Group>
-                            <Button className='float-end mb-2' variant="primary" type="submit" disabled={dominio === '0' || nombreCaso === ''}>
+                            <Button className='float-end mb-2' variant="success" type="submit" disabled={dominio === '0' || nombreCaso === ''}>
                                 Siguiente
                             </Button>
                         </div>

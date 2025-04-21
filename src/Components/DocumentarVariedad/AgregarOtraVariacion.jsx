@@ -26,7 +26,7 @@ function AgregarOtraVariacion({show, setShow, setResetInputs, setFinalizarTransa
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleNo}>Finalizar</Button>
-                    <Button variant="primary" onClick={handleSi}>Agregar</Button>
+                    <Button variant="success" onClick={handleSi}>Agregar</Button>
 
                 </Modal.Footer>
             </Modal>

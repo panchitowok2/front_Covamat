@@ -122,8 +122,8 @@ function ConsultarActivosDeDominio() {
 
     return (
         <>
-            <h2>Consultar Activos de Dominio</h2>
-            <p>Busqueda de casos que compartan contextos similares</p>
+            <h2>Crear Caso de Reuso</h2>
+            <p>Búsqueda de casos que compartan contextos similares, y creación de caso reusando variedades instanciadas en otros casos.</p>
             <Alert show={showAlert} variant={variant} onClose={() => setShowAlert(false)} dismissible>
                 <Alert.Heading>{msgAlertHeader}</Alert.Heading>
                 {msgAlert &&

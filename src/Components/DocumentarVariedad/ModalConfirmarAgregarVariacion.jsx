@@ -26,7 +26,7 @@ function ModalConfirmarAgregarVariacion({showConfirmar, setShowConfirmar, setAgr
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleNo}>No</Button>
-                    <Button variant="primary" onClick={handleSi}>Si</Button>
+                    <Button variant="success" onClick={handleSi}>Si</Button>
 
                 </Modal.Footer>
             </Modal>
