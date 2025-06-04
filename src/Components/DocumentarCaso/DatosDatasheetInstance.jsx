@@ -39,6 +39,13 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar, idCaso 
         const newRow = { id: rows.length + 1, value: '' };
         setRows([...rows, newRow]);
     };
+    const deleteRow = () => {
+        if (rows.length > 0) { // Verificar que haya al menos una fila
+            const newRows = [...rows]; // Copiar el array actual
+            newRows.pop(); // Eliminar el último elemento
+            setRows(newRows); // Actualizar el estado
+        }
+    };
 
     let auxVar = null
     let variationArr = []
@@ -186,12 +193,16 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar, idCaso 
 
     const handleSubmit = (event) => {
         event.preventDefault(); // evita que el submit refresque la pagina
-        auxVar = { name: variation, variables: null } // aca van tambien las variables
-        variationArr = [auxVar];
-        //console.log('entro a handleSubmit', idDatasheet)
+    
+        // Creamos el objeto auxVar sin el atributo variables inicialmente
+        let auxVar = { 
+            name: variation, 
+            // variables no está definido aquí
+        };
+    
+        let variationArr = [auxVar];
+    
         if (!loadingAddVariationToCase && !errorAddVariationToCase && idDatasheet) {
-            //console.log('evento handleSubmit, valor de dataid: ', dataId)
-            // Llamo al metodo que agrega datasheet instance al caso
             const datash = {
                 domain: { name: dominio },
                 varietyType: { name: varietyType },
@@ -199,25 +210,25 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar, idCaso 
                 name: null,
                 id_datasheet: idDatasheet,
                 variations: variationArr
-            }
-            // si la variacion es de tipo procesamiento, añade al datasheet
-            // de entrada el arreglo de variables
+            };
+    
+            // Solo si es 'procesamiento' añadimos el atributo variables
             if (varietyType === 'procesamiento') {
                 if (rows.length > 0) {
                     const valuesArray = {
                         var: variable,
                         valueArray: null
-                    }
+                    };
                     const arr = rows.map(row => ({ var: row.var, value: row.value }));
-                    //console.log('values array',valuesArray)
-                    valuesArray.valueArray = arr
-                    auxVar.variables = valuesArray
-                    console.log('auxVar object', auxVar)
-
+                    valuesArray.valueArray = arr;
+                    
+                    // Añadimos dinámicamente el atributo variables solo en este caso
+                    auxVar.variables = valuesArray;
+                    console.log('auxVar object', auxVar);
                 }
-
             }
-            console.log('antes de la llamada a AddVariationToCase', idCaso, datash)
+    
+            console.log('antes de la llamada a AddVariationToCase', idCaso, datash);
             addVariationToCase({
                 variables: {
                     idCase: idCaso,
@@ -225,7 +236,7 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar, idCaso 
                 }
             });
         }
-    }
+    };
 
     const handleSubmitCase = async (event) => {
         event.preventDefault(); // evita que el submit refresque la pagina
@@ -344,12 +355,14 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar, idCaso 
                                             ))}
                                         </tbody>
                                     </Table>
-                                    <Button className='btn btn-primary' variant="success" onClick={addRow}> Agregar Fila </Button>
+                                    {/*onClick={deleteRow} */}
+                                    <Button className='btn btn-primary' variant="danger" onClick={deleteRow}> Quitar Fila </Button>
+                                    <Button className='btn btn-primary ml-1' variant="success" onClick={addRow}> Agregar Fila </Button>
 
                                 </>
                                 : <></>}
 
-                            <Button className='float-end mb-2' variant="success" type="submit" disabled={loadingVT || loadingVP || loadingV}>
+                            <Button className='float-end mb-2' variant="success" type="submit" disabled={loadingVT || loadingVP || loadingV || (varietyType === 'procesamiento' && !variable) }>
                                 Agregar
                             </Button>
 
@@ -364,7 +377,7 @@ function DatosDatasheetInstance({ dominio, nombreCaso, mostrarConfirmar, idCaso 
                                 <strong>Nombre: </strong>{nombreCaso}
                             </div>
                             <Button className='position-absolute top-0 end-0 m-2'
-                                variant="primary"
+                                variant="success"
                                 type="submit"
                                 disabled={false} >
                                 Guardar

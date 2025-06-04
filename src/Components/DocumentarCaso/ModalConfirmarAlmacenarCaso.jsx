@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
-function ModalConfirmarAlmacenarCaso({showConfirmar, setShowConfirmar, actualizarVariations}) {
+function ModalConfirmarAlmacenarCaso({showConfirmar, setShowConfirmar, showAlertMessage}) {
     //const [show, setShow] = useState(false);
 
     const handleNo = () => {
@@ -10,8 +10,9 @@ function ModalConfirmarAlmacenarCaso({showConfirmar, setShowConfirmar, actualiza
     }
     
     const handleSi = () => {
-        actualizarVariations();
-        setShowConfirmar(false);
+        //actualizarVariations();
+        //setShowConfirmar(false);
+        showAlertMessage('Exito', 'success', 'El caso fue creado exitosamente')
     }
 
     return (

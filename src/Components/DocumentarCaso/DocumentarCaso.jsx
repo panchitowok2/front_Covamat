@@ -35,6 +35,8 @@ function DocumentarCaso() {
         setVariant(variant)
         setMsgAlertHeader(header)
         setMsgAlert(message)
+        setShowConfirmar(false)
+        reiniciarVariables()
         setShowAlert(true)
     }
 
@@ -99,7 +101,7 @@ function DocumentarCaso() {
                 :
                 <>
                     <DatosDatasheetInstance dominio={dominio} nombreCaso={nombreCaso} mostrarConfirmar={mostrarConfirmar} idCaso={idCaso} />
-                    <ModalConfirmarAlmacenarCaso showConfirmar={showConfirmar} setShowConfirmar={setShowConfirmar} />
+                    <ModalConfirmarAlmacenarCaso showConfirmar={showConfirmar} setShowConfirmar={setShowConfirmar } showAlertMessage={showAlertMessage} />
                 </>
             }
         </>

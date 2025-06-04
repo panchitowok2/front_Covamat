@@ -23,8 +23,8 @@ const DatosDatasheet = ({ datasheet }) => {
                 <div className="rectangle ml-3 mt-1" key={index}>
                     <strong>V</strong>
                     <span className="rectangle-text"> {variation.name} </span><br />
-                    
-                    {variation.variables && variation.variables.map( (variable, index) => (
+
+                    {variation.variables && variation.variables.map((variable, index) => (
                         <div key={index}>
                             <span>--------------</span> <br />
                             <span><strong>Variable:</strong> {variable.var}</span><br />
@@ -33,11 +33,12 @@ const DatosDatasheet = ({ datasheet }) => {
                                     <span><strong>Variable:</strong> {value.var} <strong>Value:</strong> {value.value}</span><br />
                                 </div>
                             ))}
-                        </div> 
+                        </div>
                     ))}
                 </div>
             ))}
 
+            <hr className="my-3" />
         </div>
 
     )
