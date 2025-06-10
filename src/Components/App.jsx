@@ -22,10 +22,10 @@ export default function App() {
               <img src={logo} alt="Logo" className="navbar-logo img-fluid" />
             </Link>
             <div className="navbar-nav ml-auto flex-row">
-              <Link to="/" className="nav-link mr-2 text-white">Inicio</Link>
-              <Link to="/documentarvariedad" className="nav-link mr-2 text-white">Documentar Variedad</Link>
-              <Link to="/documentarCaso" className="nav-link mr-2 text-white">Documentar Caso</Link>
-              <Link to="/consultarActivosDeDominio" className="nav-link mr-2 text-white">Consultar Activos</Link>
+              <Link to="/" className="nav-link mr-2 ">Inicio</Link>
+              <Link to="/documentarvariedad" className="nav-link mr-2 ">Documentar Variedad</Link>
+              <Link to="/documentarCaso" className="nav-link mr-2 ">Documentar Caso</Link>
+              <Link to="/consultarActivosDeDominio" className="nav-link mr-2 ">Consultar Activos</Link>
             </div>
           </div>
         </nav>

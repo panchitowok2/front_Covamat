@@ -234,10 +234,12 @@ const ActivosDeDominio = ({ contexto, dominio, showAlertMessage }) => {
                                             </span>
                                         </div>
                                         {dataIns.variations && dataIns.variations.map((variation, index) => (
-                                            <div className="rectangle ml-2 mr-2" key={index}>
+                                            <div className="rectangle ml-2 mr-2 mt-1" key={index}>
                                                 <span><strong>Variación:</strong> {variation.name}</span><br />
                                             </div>
                                         ))}
+                                        {/*LINEA DIVISORIA */}
+                                        <hr className="my-3" />
                                     </div>
                                 ))
                             ) : (

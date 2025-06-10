@@ -37,7 +37,7 @@ const DatosDatasheet = ({ datasheet }) => {
                     ))}
                 </div>
             ))}
-
+            {/*LINEA DIVISORIA */}
             <hr className="my-3" />
         </div>
 

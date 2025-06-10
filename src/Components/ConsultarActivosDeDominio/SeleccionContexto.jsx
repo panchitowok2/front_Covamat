@@ -173,7 +173,7 @@ function SeleccionContexto({ contexto, agregarContexto, mostrarActivos }) {
                             <Button className='float-end mb-2 mt-2'
                                 variant="success"
                                 type="submit"
-                                disabled={false} >
+                                disabled={contexto.reuseCase.domain.name === ""} >
                                 Consultar
                             </Button>
                         </Form.Group>
