@@ -215,3 +215,9 @@ mutation Mutation($inputCase: InputCase, $inputDatasheetInstance: [InputDatashee
   createReuseCase(inputCase: $inputCase, inputDatasheetInstance: $inputDatasheetInstance)
 }
 `;
+
+export const GET_VALID_USER = gql`
+query Query($inputUser: InputUser) {
+  getValidUser(InputUser: $inputUser)
+}
+`;

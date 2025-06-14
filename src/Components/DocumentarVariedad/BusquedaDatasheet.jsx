@@ -4,9 +4,6 @@ import { useQuery, useLazyQuery, useMutation } from '@apollo/client';
 import DatosDatasheet from './DatosDatasheet.jsx'
 import { useForm } from 'react-hook-form';
 
-//este va a ser el datasheet que se le envie al back
-let InputDatasheetInstance = {}
-
 function BusquedaDatasheet({ setIdDatasheet }) {
 
     const { register, formState: { errors }, handleSubmit, setValue, watch } = useForm({

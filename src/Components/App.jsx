@@ -6,6 +6,10 @@ import Footer from './Footer/footer.jsx';
 import DocumentarCaso from './DocumentarCaso/DocumentarCaso.jsx'
 import ConsultarActivosDeDominio from './ConsultarActivosDeDominio/ConsultarActivosDeDominio.jsx'
 import logo from '../logo COVAMATSinFondo.png'; // Asegúrate de ajustar la ruta al logo
+import MenuPrincipal from './MenuPrincipal.jsx';
+import { useState } from 'react';
+import LogIn from './Login.jsx';
+import AdminLogIn from './AdminLogIn.jsx';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000',
@@ -15,30 +19,7 @@ const client = new ApolloClient({
 export default function App() {
   return (
     <ApolloProvider client={client}>
-      <BrowserRouter>
-        <nav className="navbar custom-navbar">
-          <div className="container">
-            <Link to="/">
-              <img src={logo} alt="Logo" className="navbar-logo img-fluid" />
-            </Link>
-            <div className="navbar-nav ml-auto flex-row">
-              <Link to="/" className="nav-link mr-2 ">Inicio</Link>
-              <Link to="/documentarvariedad" className="nav-link mr-2 ">Documentar Variedad</Link>
-              <Link to="/documentarCaso" className="nav-link mr-2 ">Documentar Caso</Link>
-              <Link to="/consultarActivosDeDominio" className="nav-link mr-2 ">Consultar Activos</Link>
-            </div>
-          </div>
-        </nav>
-        <div className="container-fluid">
-          <Routes>
-            <Route path="/" element={<Saludo />} />
-            <Route path="/DocumentarVariedad" element={<DocumentarVariedad />} />
-            <Route path="/DocumentarCaso" element={<DocumentarCaso />} />
-            <Route path="/ConsultarActivosDeDominio" element={<ConsultarActivosDeDominio />} />
-          </Routes>
-        </div>
-        <Footer />
-      </BrowserRouter>
+      <AdminLogIn />
     </ApolloProvider>
   );
 }
